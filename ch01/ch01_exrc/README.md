@@ -394,3 +394,57 @@ In file included from ch01_exrc_1p15_02.cpp:1:
       |                  ^~~~
 Compilation failed.
 ```
+
+## ch01_exrc_1p17
+
+The program will continue to receive the inputs forever and will show the count when end-of-line character is entered.
+
+## ch01_exrc_1p18
+
+ran ch01_exmp_1p4p4_01
+
+- The program will continue to receive the inputs forever and will show the count when end-of-line character is entered.
+
+```console
+Executing './a.out'...
+42
+42
+42
+42
+42
+42
+42
+42
+42
+42 occurs 9 times
+
+--------------------------
+Last execution status: 0
+```
+
+- We get print saying the number occured once, for every number we enter.
+
+```console
+Executing './a.out'...
+1
+2
+1 occurs 1 times
+3
+2 occurs 1 times
+4 
+3 occurs 1 times
+5
+4 occurs 1 times
+6
+5 occurs 1 times
+7
+6 occurs 1 times
+89
+7 occurs 1 times
+9
+89 occurs 1 times
+9 occurs 1 times
+
+--------------------------
+Last execution status: 0
+```
