@@ -3,7 +3,7 @@
 # Script name: perform.sh
 
 # SOURCE_FILE="$1"
-SOURCE_FILE="ch01_exmp_1p4p4_01.cpp"
+SOURCE_FILE="ch01_exmp_1p5p2_01.cpp"
 # EXECUTABLE_NAME="${SOURCE_FILE%.cpp}" # Remove .cpp extension for executable name
 EXECUTABLE_NAME="a.out" # Remove .cpp extension for executable name
 

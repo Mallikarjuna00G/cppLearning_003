@@ -1,0 +1,6 @@
+aaa 2 34
+aaa 5 56
+bbbb 6 77
+bbbb 5 666
+bbbb 7 5555
+cf 3 45
