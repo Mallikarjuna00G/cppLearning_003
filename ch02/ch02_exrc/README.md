@@ -111,3 +111,95 @@ type is `float`. 4 bytes. Results to `1024.0`.
 d) `3.14L`
 
 types is `long double`. 16 bytes. Results to `3.14`.
+
+## ch02_exrc_2p9
+
+Exercise 2.9: Explain the following definitions. For those that are illegal, explain what’s wrong and how to correct it.
+
+a) `std::cin >> int input_value;`
+
+`std::cin` expects a readily available memory. So the given statement is wrong.
+
+We will get the error:
+
+```console
+$ g++ temp.cpp 
+temp.cpp: In function ‘int main()’:
+temp.cpp:5:17: error: expected primary-expression before ‘int’
+    5 |     std::cin >> int input_value;
+      |  
+```
+
+Correct way is as follows:
+
+```cpp
+int input_value;
+std::cin >> input_value;
+```
+
+
+b) `int i = { 3.14 };`
+
+We will get the error:
+
+```cpp
+$ g++ temp.cpp 
+temp.cpp: In function ‘int main()’:
+temp.cpp:5:15: error: narrowing conversion of ‘3.1400000000000001e+0’ from ‘double’ to ‘int’ [-Wnarrowing]
+    5 |     int i = { 3.14 };
+      |    
+```
+
+If you still want to assign anyway even if it discards decimal part, write like this: `int i = 3.14;` or `int i = (3.14)` or `int i(3.14)`.
+
+Or if you want the whole value, change the type to `double`.
+
+`double i = { 3.14 }`
+
+c) `double salary = wage = 9999.99;`
+
+We get the error:
+
+```console
+$ g++ temp.cpp 
+temp.cpp: In function ‘int main()’:
+temp.cpp:5:21: error: ‘wage’ was not declared in this scope
+    5 |     double salary = wage = 9999.99;
+      |
+```
+
+We can write like this:
+
+```cpp
+double wage = 9999.99, salary = wage;
+```
+
+d) `int i = 3.14;`
+
+With this statement, the decimal part of the literal is discarded and `i` will have value `3`. Change the type to `double` if you want the whole value.
+
+
+## ch02_exrc_2p10
+
+Exercise 2.10: What are the initial values, if any, of each of the following variables?
+
+```cpp
+std::string global_str;
+int global_int;
+
+int main()
+{
+    int local_int;
+    std::string local_str;
+}
+```
+
+The value of an object of built-in type that is not explicitly initialized depends on where it is defined. Variables defined outside any function body are initialized to zero. With one exception, which we cover in § 6.1.1 (p. 205), variables of built-in type defined inside a function are uninitialized. The value of an uninitialized variable of built-in type is `undefined` (§ 2.1.2, p. 36). It is an error to copy or otherwise try to access the value of a variable whose value is `undefined`.
+
+- `global_str` will have empty string.
+- `global_int` will have value 0.
+
+
+(through execution we have seen that)
+- `local_str` will have empty string.
+- `local_int` will have value 0.
