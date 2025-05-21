@@ -203,3 +203,118 @@ The value of an object of built-in type that is not explicitly initialized depen
 (through execution we have seen that)
 - `local_str` will have empty string.
 - `local_int` will have value 0.
+
+## ch02_exrc_2p11
+
+Exercise 2.11: Explain whether each of the following is a declaration or a definition:  
+(a) `extern int ix = 1024;`  
+(b) `int iy;`  
+(c) `extern int iz;`  
+
+**Declaration**: A declaration introduces a name to the program. It tells the compiler about the existence and type of a variable, function, or other entity. It does not allocate storage for the entity. A declaration can occur multiple times for the same entity within a program.
+
+**Definition**: A definition provides the full and complete description of an entity. For variables, this means allocating storage for the variable. For functions, it means providing the function body. An entity can only be defined once in an entire program (One Definition Rule - ODR).
+
+(a) `extern int ix = 1024;`
+
+This is a definition.
+
+The `extern` keyword usually suggests a declaration, indicating that the variable is defined elsewhere. However, the presence of an initializer (`= 1024`) immediately turns a declaration into a definition. When you provide an initial value, you are telling the compiler "allocate storage for this variable right here, and initialize it with this value."
+
+(b) `int iy;`
+
+This is a definition.
+
+When a variable is declared without any storage class specifiers (like `extern`) at global scope, or without `extern` at file scope, and has no initializer, it is considered a definition. It tells the compiler to allocate storage for an `int` variable named `iy` and implicitly initialize it to zero (for global or static variables) or leave it uninitialized (for local variables).
+
+(c) `extern int iz;`
+
+This is a declaration.
+
+The `extern` keyword explicitly states that the variable `iz` is defined elsewhere (in another translation unit or later in the same translation unit). Crucially, there is no initializer present. This means no storage is allocated for `iz` at this point. This statement simply informs the compiler about the type and name of `iz` so that it can be used in the current scope.
+
+## ch02_exrc_2p12
+
+Exercise 2.12: Which, if any, of the following names are invalid?
+
+(a) `int double = 3.14;`: Invalid. `double` is a reserved keyword in C++. You cannot use reserved keywords as variable names.
+
+(b) `int _;`: Valid. In C++, a variable name can start with an underscore (`_`) and consist only of an underscore. While it's valid, using just `_` as a variable name is generally poor practice and can sometimes conflict with compiler-generated names or standard library macros, leading to unexpected behavior.
+
+(c) `int catch-22;`: Invalid. Variable names in C++ cannot contain hyphens (`-`). Hyphens are interpreted as the subtraction operator.
+
+(d) `int 1_or_2 = 1;`: Invalid. Variable names in C++ cannot start with a digit. They must start with a letter (`a-z`, `A-Z`) or an underscore (`_`).
+
+(e) `double Double = 3.14;`: Valid. C++ is case-sensitive. double (lowercase) is a keyword, but Double (uppercase D) is a distinct name and is not a keyword. Therefore, Double is a valid variable name. However, it's generally considered bad practice to use names that differ only by case from keywords, as it can be confusing. And also there is a convention of using first letter in uppercase in classes only.
+
+## ch02_exrc_2p13
+
+Exercise 2.13: What is the value of `j` in the following program?
+
+```cpp
+int i = 42;
+
+int main()
+{
+  int i = 100;
+  int j = i;
+}
+```
+
+Value of `j` will be `100`. Because, local variable `i` is hiding the global variable `i`. So, only local variable `i` is visible inside the function `main`.
+
+## ch02_exrc_2p14
+
+Exercise 2.14: Is the following program legal? If so, what values are printed?
+
+```cpp
+int i = 100, sum = 0;
+for (int i = 0; i != 10; ++i)
+  sum += i;
+std::cout << i << " " << sum << std::endl;
+```
+
+The final output will be `100 45`. The program is legal but can cause confusion due to `i` variable definition inside the for loop; which hides the `i` variable defined before the for loop.
+
+## ch02_exrc_2p15
+
+Exercise 2.15: Which of the following definitions, if any, are invalid? Why?
+
+(a) `int ival = 1.01;`: Invalid. Assigning a `double` value to an integer variable. We will lose the decimal part of the value.
+
+
+(b) `int &rval1 = 1.01;`: Invalid. Initializer must be an object.
+
+(c) `int &rval2 = ival;`: Valid.
+
+(d) `int &rval3;`: Invalid. A reference must be initialized.
+
+## ch02_exrc_2p16
+
+Exercise 2.16: Which, if any, of the following assignments are invalid? If they are valid, explain what they do.
+
+```cpp
+int i = 0, &r1 = i; double d = 0, &r2 = d;
+```
+
+(a) `r2 = 3.14159;`: Valid. `d` will have the value `3.14159`.
+
+(b) `r2 = r1;`: Valid. `d` will have the value `0`. Because `r1` is reference to `i` which is an `int` and has value `0`. And that value will get converted to `double` while getting assigned to `d`.
+
+(c) `i = r2;`: Valid. But, `r2` is a reference to `double` object while `i` is an `int`. The statement means `i = d`; so decimal part, if any, gets discarded in `i`.
+
+(d) `r1 = d;`: Valid. It means `i = d`. value of `d` gets copied to `i`; and decimal part of `d` gets ignored while getting copied to `i`.
+
+## ch02_exrc_2p17
+
+Exercise 2.17: What does the following code print?
+
+```cpp
+int i, &ri = i;
+i = 5; ri = 10;
+std::cout << i << " " << ri << std::endl;
+```
+
+```console
+10 10
+```
