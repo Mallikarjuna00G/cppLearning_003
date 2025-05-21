@@ -318,3 +318,102 @@ std::cout << i << " " << ri << std::endl;
 ```console
 10 10
 ```
+
+## ch02_exrc_2p19
+
+Exercise 2.19: Explain the key differences between pointers and references.
+
+Here's a brief explanation of the key differences between pointers and references in C++:
+
+|Feature|Pointers (`*`)|References (`&`)|
+|---|---|---|
+|Declaration|`int *ptr;` (`*` is part of the type)|`int &ref = var;` (`&` is part of the type)|
+|Initialization|Can be declared without initialization. Can be `nullptr`.|MUST be initialized at the point of declaration. Cannot be null.|
+|Reassignment|Can be reassigned to point to a different object.|Cannot be reassigned once initialized. It always refers to its initial object.|
+|Null Value|Can be `nullptr` (or `NULL`).|Cannot be null. Always refers to a valid object.|
+|Dereferencing|Requires explicit dereferencing (*ptr) to access the object it points to.|No explicit dereferencing needed; used directly like the object it refers to.|
+|Address-of|Can take the address of an object (`&obj`).|Cannot directly take the address of a reference itself. Taking `&ref` gives the address of the object it refers to.|
+|Memory|May occupy memory (typically 4 or 8 bytes) to store an address.|Typically do not occupy storage themselves (compiler optimization), they are just aliases.|
+|Arithmetic|Supports pointer arithmetic (`ptr++`, `ptr + 5`, etc.).|Does not support reference arithmetic.|
+|Binding|Can point to an object, or nothing (`nullptr`).|Must bind to an existing object.|
+
+## ch02_exrc_2p20
+
+Exercise 2.20: What does the following program do?
+
+```cpp
+int i = 42;
+int *p1 = &i;
+*p1 = *p1 * *p1;
+```
+
+`i` will be `42 * 42 = 1764`.
+
+## ch02_exrc_2p21
+
+Exercise 2.21: Explain each of the following definitions. Indicate whether any are illegal and, if so, why.
+
+```cpp
+int i = 0;
+```
+
+(a) `double* dp = &i;`: Illegal. double pointer trying to point to an object of type `int`. the pointer should be same type as the object.
+
+(b) `int *ip = i;`: Illegal. We are writing `int *ip = 0;` in other words. It is not wrong to assign 0 to the pointer but it is wrong if the intent is to point to object of `i`.
+
+(c) `int *p = &i;`: Legal.
+
+## ch02_exrc_2p22
+
+Exercise 2.22: Assuming p is a pointer to int, explain the following code:
+
+```cpp
+if (p) // ...
+if (*p) // ...
+```
+
+First `if` condition always passes except when p has the address 0.
+
+Seconf `if` condition always passes except when the object pointed to by `p` has the value 0.
+
+## ch02_exrc_2p23
+
+Exercise 2.23: Given a pointer `p`, can you determine whether `p` points to a valid object? If so, how? If not, why not?
+
+No, you generally cannot reliably determine whether a pointer `p` points to a valid object in C++ just by examining `p` itself.
+
+**Why not?**
+
+Memory is just numbers: A pointer is just a variable holding a memory address (a number). It doesn't inherently carry metadata about whether that address is currently "valid" or "owned" by your program.
+
+## ch02_exrc_2p24
+
+Exercise 2.24: Why is the initialization of `p` legal but that of `lp` illegal?
+
+```cpp
+int i = 42; void *p = &i; long *lp = &i;
+```
+
+`void *p = &i;` is legal because a `void*` is a generic pointer. It can hold the address of any data type, and a pointer to any object type can be implicitly converted to a `void*`.
+
+`long *lp = &i;` is illegal because `&i` is of type `int*`, and `lp` is of type `long*`. C++ does not allow implicit conversion between pointers to different, unrelated data types like `int*` and `long*`. This is to prevent type-safety violations and potential misinterpretation of memory.
+
+## ch02_exrc_2p25
+
+Exercise 2.25: Determine the types and values of each of the following variables.
+
+(a) `int* ip, i, &r = i;`
+
+- `ip` is a pointer to an `int`.
+- `i` is an `int`.
+- `r` is a reference to `int` object `i`.
+
+ (b) `int i, *ip = 0;`
+ 
+ - `i` is an `int`.
+ - `ip` is a pointer initialized to 0 (`nullptr`).
+ 
+(c) `int* ip, ip2;`
+
+- `ip` is a pointer to an int.
+- `ip2` is an `int`.
