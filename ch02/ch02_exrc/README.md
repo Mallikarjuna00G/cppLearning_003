@@ -417,3 +417,161 @@ Exercise 2.25: Determine the types and values of each of the following variables
 
 - `ip` is a pointer to an int.
 - `ip2` is an `int`.
+
+## ch02_exrc_2p26
+
+Exercise 2.26: Which of the following are legal? For those that are illegal, explainwhy.
+
+(a) `const int buf;`: Illegal. `const` object must always be initialized.
+
+(b) `int cnt = 0;`: Legal.
+
+(c) `const int sz = cnt;`: Legal.
+
+(d) `++cnt; ++sz;`: `++cnt` is fine but `++sz` is not acceptable bacause `sz` is `const` object. We cannot modify it.
+
+## ch02_exrc_2p27
+
+Exercise 2.27: Which of the following initializations are legal? Explain why.
+
+(a) `int i = -1, &r = 0;`: Illegal. References cannot be initialized with literals.
+
+- `int i = -1;` is legal.
+- `&r = 0;` is illegal because `r` is a non-`const` reference to an `int`. A non-`const` reference must bind to an lvalue (an object that has an address). A literal like `0` is an rvalue (a temporary value without a persistent address).
+
+(b) `int *const p2 = &i2;`: Legal (assuming `i2` is a non-`const` `int`).
+
+- `p2` is a `const` pointer to a non-`const` `int`. This means `p2` itself cannot be reassigned to point to a different object, but the `int` object it points to (`i2`) can be modified through `*p2`.
+- `&i2` gives a pointer to `i2` (type `int*`), which matches the type that `p2` points to.
+
+(c) `const int i = -1, &r = 0;`: Legal.
+
+- `const int i = -1;` is legal.
+- `&r = 0;` is legal because `r` is a `const` reference to an `int` (`const int&`). A `const` reference has special rules: it can bind to an rvalue (like the literal `0`) or an object of a different (but convertible) type. When it binds to an rvalue, a temporary `const int` object is created and initialized with `0`, and `r` binds to this temporary object. The lifetime of this temporary is extended to that of the `const` reference `r`.
+
+(d) `const int *const p3 = &i2;`: legal (assuming `i2` is a `const int`).
+
+- `p3` is a `const` pointer to a `const int`. This means neither `p3` itself can be reassigned, nor can the `int` object it points to be modified through `*p3`.
+- It is legal to initialize `p3` with the address of a non-`const int` (`&i2`) because you are essentially "adding `const`ness" (making it appear `const` through this pointer). It's also legal to initialize it with the address of an actual `const int`.
+
+(e) `const int *p1 = &i2;`: Legal (assuming `i2` is a `const int`).
+
+- `p1` is a non-`const` pointer to a `const int`. This means `p1` can be reassigned to point to a different `const int` object, but the `int` object it points to cannot be modified through `*p1`.
+- It is legal to initialize `p1` with the address of a non-`const int` (`&i2`), as you are making `i2` appear `const` when accessed via `p1`. It's also legal if `i2` is actually a `const int`.
+
+(f) `const int &const r2;`: Illegal. Reference is not initialized.
+
+- The syntax `&const` is actually invalid in C++. A `const` reference is declared as `const type&`.
+- Even if the syntax were corrected to `const int& r2;`, it would still be illegal because all references must be initialized at the point of declaration. `r2` is not initialized here.
+
+(g) `const int i2 = i, &r = i;`: Legal.
+
+- `const int i2 = i;` is legal. `i2` is a `const int` initialized with the current value of `i`.
+- `&r = i;` is legal. `r` is a non-`const` reference to `int`, and it is correctly initialized to bind to the existing `int` object `i`.
+
+## ch02_exrc_2p28
+
+Exercise 2.28: Explain the following definitions. Identify any that are illegal.
+
+(a) `int i, *const cp;`: Illegal. `const` pointers must be initialized.
+
+- `i` is a legal declaration of an `int` (uninitialized).
+- `cp` is declared as a `const` pointer to an `int`. Since `cp` is `const` itself, it must be initialized to point to something at the time of its definition. It is not, hence it's illegal.
+
+(b) `int *p1, *const p2;`: Illegal. `const` pointer `p2` must be initilized.
+
+- `p1` is a legal declaration of a pointer to an `int` (uninitialized).
+- `p2` is declared as a `const` pointer to an `int`. Similar to (a), `p2` is `const` and must be initialized. It is not, hence it's illegal.
+
+(c) `const int ic, &r = ic;`: Ilegal.
+
+- `const int ic;` is illegal because `ic` is a `const int` that is not initialized. `const` objects must be initialized at the point of definition.
+- Since `ic` is illegal, then `&r = ic;` also becomes problematic because `r` is trying to refer to an illegally declared (uninitialized `const`) object.
+
+(d) `const int *const p3;`: Illegal. `const` pointers must be initialized.
+
+- `p3` is a `const` pointer to a `const int`. Since `p3` itself is `const`, it must be initialized. It is not, hence it's illegal.
+
+(e) `const int *p;`: Legal. Pointer to `const int` object.
+
+- `p` is a non-`const` pointer to a `const int`. This means the value that `p` points to cannot be changed through `p`, but `p` itself can be reassigned to point to a different `const int` (or a non-`const int` that it treats as `const`).
+- Pointers (even those pointing to `const` data) do not need to be initialized at definition unless the pointer itself is `const` (which `p` is not in this case). So, its initial value is uninitialized (garbage).
+
+## ch02_exrc_2p29
+
+Exercise 2.29: Uing the variables in the previous exercise, which of the following assignments are legal? Explain why.
+
+(a) `i = ic;`: Ilegal. Because `ic` was not initialized.
+
+- As established in 2.28(c), `const int ic;` is illegal because `const` objects must be initialized.
+- Even if `ic` were legally declared (e.g., `const int ic = 5;`), this assignment would still be problematical because `ic` might contain an indeterminate value if it were legally declared but not initialized (e.g., if it were a global/static `const int` it would be `0`, but if it were a local `const int` that was uninitialized, then using its value would be undefined behavior). But the primary reason here is that `ic` itself is an illegal definition.
+
+(b) `p1 = p3;`: Illegal. Because `p3` was not initialized.
+
+- From 2.28(d), `p3` is an illegally defined `const int *const` because it's not initialized. You cannot use an illegally defined variable in an assignment.
+
+(c) `p1 = &ic;`: Illegal. Because, `ic` is `const int` while `p1` is a pointer to just `int`; which is wrong.
+
+- Again, `ic` is an illegally defined `const int` from 2.28(c). So, taking its address is problematic.
+- Even if `ic` were a legally defined `const int` (e.g., `const int ic_legal = 5;`), the assignment `p1 = &ic_legal;` would still be illegal.
+- `p1` is of type `int*` (a pointer to a non-`const int`).
+- `&ic_legal` would be of type `const int*` (a pointer to a `const int`).
+- You cannot implicitly convert a `const int*` to an `int*` because it would allow you to modify a `const` object through a non-`const` pointer, which violates `const`-correctness.
+
+(d) `p3 = &ic;`: Ilegal. `p3` is a `const` pointer. We cannot assign new values.
+
+- From 2.28(d), `p3` is an illegally defined `const int *const` (uninitialized `const` pointer). You can't use it.
+- Even if `p3` were legally defined (e.g., `const int *const p3_legal = &some_int;`), you still couldn't assign to it later because `p3` itself is a `const` pointer, meaning its target cannot be changed after initialization.
+
+(e) `p2 = p1;`: Illegal. `p2` is a `const` pointer. We cannot assign new values.
+
+- From 2.28(b), `p2` is an illegally defined `int *const` (uninitialized `const` pointer). You can't use it.
+- Even if `p2` were legally defined (e.g., `int *const p2_legal = &some_other_int;`), you still couldn't assign to it later because `p2` itself is a `const` pointer, meaning its target cannot be changed after initialization.
+
+(f) `ic = *p3;`: Illegal. `ic` is a `const` integer. We cannot assign new values.
+
+- From 2.28(c), `ic` is an illegally defined `const int`. So, you can't assign to it.
+- Even if `ic` were a legally defined `const int` (e.g., `const int ic_legal = 5;`), you still could not assign a new value to it because `ic_legal` is `const`.
+- Additionally, `p3` itself is illegally defined from 2.28(d), so dereferencing it (`*p3`) would be undefined behavior.
+
+
+## ch02_exrc_2p30
+
+Exercise 2.30: For each of the following declarations indicate whether the object being declared has top-level or low-level const.
+
+`const int v2 = 0;`: top-level `const`.
+
+`int v1 = v2;`: no `const` level.
+
+`int *p1 = &v1, &r1 = v1;`: no `const` level.
+
+`const int *p2 = &v2, *const p3 = &i, &r2 = v2;`: `p2` has low-level `const`. `p3` has top-level `const`. `r2` has low-level `const`.
+
+## ch02_exrc_2p31
+
+Exercise 2.31: Given the declarations in the previous exercise determine whether the following assignments are legal. Explain how the top-level or low-level const applies in each case.
+
+`r1 = v2;`: Legal.
+
+- `r1` is a non-`const` reference to `v1`. You can modify the object `r1` refers to (`v1`).
+- `v2` is a `const int`.
+- The assignment `r1 = v2;` means "assign the value of `v2` (which is `0`) to the object that `r1` refers to (`v1`)".
+- This is a legal assignment where the `const` value of `v2` is copied into the non-`const` variable `v1` (via `r1`). The `const` on `v2` is top-level, meaning it's about `v2` itself. When `v2`'s value is used in an expression, its `const`-ness is ignored.
+
+`p1 = p2;`: Illegal. Because `p1` is a pointer to non-`const int` while `p2` is a pointer to `const int`. So the assignment is wrong.
+
+- `p1` is `int*` (pointer to non-`const`).
+- `p2` is `const int*` (pointer to `const`).
+- You cannot implicitly convert a `const int*` to an `int*`. This would allow you to modify a `const` object through `p1`, which is a violation of `const`-correctness. This is a low-level `const` issue.
+
+`p2 = p1;`: Legal. Because `p1` is `int*` and `p2` is `const int*`. We can convert `int*` to `const int*`. The assignment is correct.
+
+- `p1` is `int*` (pointer to non-`const`).
+- `p2` is `const int*` (pointer to `const`).
+- You can implicitly convert an `int*` to a `const int*`. This is safe because you're adding `const`ness (promising not to modify the object through `p2` even if `p1` could). This is a low-level `const` conversion.
+
+`p1 = p3;`: Illegal. Because `p1` is `int*` while `p3` is `const int *const`. Mismatch in low-level `const`.
+
+
+
+`p2 = p3;`: Legal. There is a match in low-level `const`-ness.
