@@ -575,3 +575,234 @@ Exercise 2.31: Given the declarations in the previous exercise determine whether
 
 
 `p2 = p3;`: Legal. There is a match in low-level `const`-ness.
+
+## ch02_exrc_2p32
+
+Exercise 2.32: Is the following code legal or not? If not, how might you make it legal?
+
+`int null = 0, *p = null;`
+
+It is Illegal.
+
+- `int null = 0;`: This part is perfectly legal. It declares an integer variable named `null` and initializes it with the value `0`.
+- `*p = null;`: This part is where the problem lies.
+- `p` is declared as a pointer to an `int` (`int*`).
+- We are trying to initialize `p` with the value of the `int` variable `null`.
+- In C++, you cannot implicitly convert an integer variable (even if it holds the value `0`) to a pointer type for initialization. A null pointer constant is defined as an integer literal with value zero (e.g., `0`) or a prvalue of type `std::nullptr_t` (`nullptr`). An integer variable is neither of these.
+- The compiler will typically give an error along the lines of "cannot convert 'int' to 'int*'".
+
+**How to make it legal:**
+
+We need to use a proper null pointer constant to initialize `p`.
+
+1. Using `nullptr` (C++11 and later, preferred):
+
+```cpp
+int null = 0;
+int *p = nullptr; // Correct: p is initialized to a null pointer
+```
+
+2. Using the integer literal `0` (C++98/03 compatible):
+
+```cpp
+int null = 0;
+int *p = 0;  // Correct: 0 as a literal is a valid null pointer constant
+```
+
+## ch02_exrc_2p33
+
+Exercise 2.33: Using the variable definitions from this section, determine what happens in each of these assignments:
+
+`a = 42;`: Valid. `a` will be of type `int`. `a` is assigned with `42`.
+
+`b = 42;`: Valid. `b` will be of type `int` and will have the value `42`.
+
+`c = 42;`: Valid. `c`'s type is `int` and will have the value `42`.
+
+`d = 42;`: Invalid. Error. Invalid conversion from `int` to `int *`.
+
+`e = 42;`: Invalid. Error. Invalid conversion from `int` to `const int*`.
+
+`g = 42;`: Invlaid. `g` is actually reference to a `const int` object which is already initialized. So we cannot modify the value. Error: assignment of read-only reference 'g'.
+
+## ch02_exrc_2p34
+
+compilation output:
+
+```console
+$ ./perform.sh
+Compiling 'ch02_exrc_2p34.cpp' using g++ with C++11 standard...
+g++ -std=c++11 -Wall ch02_exrc_2p34.cpp -o a.out
+ch02_exrc_2p34.cpp: In function ‘int main()’:
+ch02_exrc_2p34.cpp:31:9: error: invalid conversion from ‘int’ to ‘int*’ [-fpermissive]
+   31 |     d = 42;
+      |         ^~
+      |         |
+      |         int
+ch02_exrc_2p34.cpp:32:9: error: invalid conversion from ‘int’ to ‘const int*’ [-fpermissive]
+   32 |     e = 42;
+      |         ^~
+      |         |
+      |         int
+ch02_exrc_2p34.cpp:33:7: error: assignment of read-only reference ‘g’
+   33 |     g = 42;
+      |     ~~^~~~
+ch02_exrc_2p34.cpp:13:16: warning: unused variable ‘f’ [-Wunused-variable]
+   13 |     const auto f = ci;  // deduced type of ci is int; f has type const int
+      |                ^
+ch02_exrc_2p34.cpp:17:17: warning: unused variable ‘j’ [-Wunused-variable]
+   17 |     const auto &j = 42;  // ok: we can bind a const refereal to a literal.
+      |                 ^
+Compilation failed.
+```
+
+## ch02_exrc_2p35
+
+Determine the types deduced in each of the following definitions. Once
+you’ve figured out the types, write a program to see whether you were correct.
+
+```cpp
+const int i = 42;
+auto j = i;
+const auto &k = i;
+auto *p = &i;
+const auto j2 = i, &k2 = i;
+```
+
+`const int i = 42;`: `i` is `const int`.
+
+`auto j = i;`: `j` is `int`.
+
+`const auto &k = i;`: `k` is reference to `const int`.
+
+`auto *p = &i;`: `&i` has type `const int*`. `p` is pointer to `const int` object i.e., `const int*`.
+- *Explanation*: `&i` has the type `const int*` (pointer to `const int`). When you use `auto *p = expression;`, `auto` deduces the non-pointer part of the expression's type. So, auto deduces `const int` from `const int*`. Then, the `*` from auto `*p` is applied, making `p` a pointer to `const int`.
+
+`const auto j2 = i, &k2 = i;`: `j2` will be `const int` and `k2` will be `const int&`.
+
+- For `j2`: `auto` deduces `int` from `i` (ignoring top-level `const` of `i`). Then `const` from `const auto` is applied to `int`, making `j2` a `const int`.
+- For `k2`: `auto` deduces `int` from `i`. The `const` from `const auto` is applied to `int`, and the `&` makes it a reference. So, `k2` is `const int&`.
+
+## ch02_exrc_2p36
+
+Exercise 2.36: In the following code, determine the type of each variable and the value each variable has when the code finishes:
+
+`int a = 3, b = 4;`: 
+`a` has type `int` and holds value `3`
+`b` has type `int` and holds value `4`
+
+
+`decltype(a) c = a;`: 
+`decltype(a)` deduces to `int`.
+So, we get `int c = a;`. Therefore, `c` has the value `3`.
+
+`decltype((b)) d = a;`:   
+`decltype((b))` deduces to `int&`.  
+`int &d = a;`  
+So, `d` is just a reference to `a`.
+- `decltype((b))`: When a variable name is enclosed in an extra set of parentheses `((b))`, `decltype` treats it as an lvalue expression. For an lvalue expression, `decltype` yields an lvalue reference. Since `b` is an `int`, `(b)` is an `int` lvalue expression. So, `decltype((b))` is `int&`.
+
+`++c;`: 
+`c` will have the value `4`.
+
+`++d;`: 
+`a` will have the value `4`. Because we are increment `d` which is a reference to `a`.
+
+## ch02_exrc_2p37
+
+Exercise 2.37: Assignment is an example of an expression that yields a reference type. The type is a reference to the type of the left-hand operand. That is, if `i` is an `int`, then the type of the expression `i = x` is `int&`. Using that knowledge, determine the type and value of each variable in this code:
+
+```cpp
+int a = 3, b = 4;
+decltype(a) c = a;
+decltype(a = b) d = a;
+```
+
+`int a = 3, b = 4;`:
+
+`decltype(a) c = a;`:
+- `decltype(a)` deduces to `int`
+- `int c = a;`
+- a = 3, b = 4, c = 3
+
+`decltype(a = b) d = a;`:
+- `decltype(a = b)` deduces to `int&`
+- `int &d = a;`
+- a = 4, b = 4, c = 3 and d (which is a reference to a) is also 4.
+
+## ch02_exrc_2p38
+
+`auto` and `decltype` are both C++ features for type deduction, but they operate under different rules and are used in different contexts.
+
+#### Fundamental Differences:
+**Purpose**:
+
+`auto`: Primarily used for variable declaration to simplify code by letting the compiler deduce the type of a variable from its initializer. It's about how a new variable is initialized.
+
+`decltype`: Primarily used to query the exact type of a given entity (a variable) or expression. It's about knowing the precise type of something that already exists or results from an operation.
+
+#### Deduction Rules:
+
+`auto`: Follows a simplified set of rules (similar to template argument deduction).
+- It typically strips top-level `const` (and `volatile`) qualifiers.
+- It discards references from the initializer (unless the `auto` itself is followed by `&` (or `&&`)).
+- It preserves low-level `const` (i.e., `const` applying to what a pointer points to).
+
+`decltype`: Follows a much stricter set of rules, focusing on the exact type and value category of its operand.
+- If the operand is a variable name, `decltype` yields its exact type, including all `const`(/`volatile`) qualifiers and reference properties.
+- If the operand is an expression: 
+- - If the expression is an **lvalue** (something that refers to a persistent memory location), `decltype` yields an lvalue reference to its type.
+- - If the expression is an **rvalue** (a temporary value), `decltype` yields the pure type of the expression.
+- An extra set of parentheses around a variable name `decltype((var))` makes it an lvalue expression, resulting in a reference type.
+
+#### Examples:
+1. Example where `auto` and `decltype` deduce the same type:
+
+When `auto` and `decltype` are applied to a simple non-`const`, non-reference value initialization, they will often deduce the same type.
+
+```cpp
+int value = 10;
+
+auto a = value;  // `auto` deduces `int`. (Strips no top-level const/ref)
+decltype(value) d;   // `decltype` deduces `int`. (Exact type of `value`)
+
+// Both 'a' and 'd' are of type `int`.
+// `a` is initialized to 10. `d` is uninitialized (or default-initialized to 0 if static/global).
+```
+
+2. Example where `auto` and `decltype` deduce differing types:
+
+This usually happens when there are `const` qualifiers or reference types involved, or when `decltype` queries an lvalue expression.
+
+```cpp
+const int i = 42; // `i` is a `const int`
+
+// Case 1: `auto` strips top-level const, `decltype` preserves exact type
+auto a = i;        // `auto` deduces `int`. (Strips `const` from `i`)
+decltype(i) d = i; // `decltype` deduces `const int`. (Preserves `const` on `i`)
+
+// 'a' is an `int`, 'd' is a `const int`.
+
+// Case 2: `decltype` captures lvalue reference, `auto` discards reference
+int val = 100;
+int *ptr = &val;
+
+auto a_deref = *ptr;        // `auto` deduces `int`. (`*ptr` refers to `val`, but `auto` discards the reference property)
+decltype(*ptr) d_deref = val; // `decltype` deduces `int&`. (`*ptr` is an lvalue, so `decltype` yields a reference)
+```
+
+In essence, `auto` is about convenience for variable declaration, often simplifying the deduced type. `decltype` is about precision, providing the exact type as seen by the compiler, including subtle details about `const`ness and value categories.
+
+## ch02_exrc_2p39
+
+```console
+$ ./perform.sh 
+Compiling 'ch02_exrc_2p39.cpp' using g++ with C++11 standard...
+g++ -std=c++11 -Wall ch02_exrc_2p39.cpp -o a.out
+ch02_exrc_2p39.cpp:3:26: error: expected ‘;’ after struct definition
+    3 | struct Foo { /* empty */}  // Note: no semicolon
+      |                          ^
+      |                          ;
+Compilation failed.
+```
+
