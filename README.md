@@ -13,3 +13,5 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 ## Part 1: The Basics
 
 [ch02](./ch02/): Variables and basic types
+
+[ch03](./ch03/): Strings, Vectors, and Arrays
