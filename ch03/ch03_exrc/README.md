@@ -161,10 +161,10 @@ Exercise 3.26: In the binary search program on page 112, why did we write `mid =
 
 ```cpp
 // text must be sorted
-// beg and end will denote the range we’re searching
+// beg and end will denote the range we're searching
 auto beg = text.begin(), end = text.end();
 auto mid = text.begin() + (end - beg)/2; // original midpoint
-// while there are still elements to look at and we haven’t yet found sought
+// while there are still elements to look at and we haven't yet found sought
 while (mid != end && *mid != sought) {
     if (sought < *mid) // is the element we want in the first half?
         end = mid; // if so, adjust the range to ignore the second half
@@ -319,3 +319,32 @@ p1 += p2 - p1;
 Considering the point that both `p1` and `p2` point to elements in the same array, any valid address from `p2` will the statement legal and if the `p2` is not valid then the statement will be illegal.
 
 The given statement gets deduce as, `p1 = p1 + (p2 - p1);` which is same as `p1 = p1 + p2 - p1;` and again that is same as `p1 = p2;`. So the statements validity is completely dependent on `p2`.
+
+## ch03_exrc_3p37
+
+Exercise 3.37: What does the following program do?
+
+```cpp
+const char ca[] = {'h', 'e', 'l', 'l', 'o'};
+const char *cp = ca;
+
+while (*cp) {
+    cout << *cp << endl;
+    ++cp;
+}
+```
+
+The while loop may or may not stop looping after all the elements of the array are attended and will only stop if it encounters null character anywhere in the memory after the array.
+
+## ch03_exrc_3p38
+
+Exercise 3.38: In this section, we noted that it was not only illegal but meaningless to try to add two pointers. Why would adding two pointers be meaningless?
+
+In this section we see that 
+
+```cpp
+const char ca1[] = "A string example";
+const char ca2[] = "A different string";
+```
+
+With the intention of concatenating two character arrays (like we do in strings) if we write `ca1 + ca2`, it will not work. Because, here `ca1` and `ca2` are like pointers pointing to the first elements of their array. So, it will become a pointer arithmetic, in otherwords addition of two addresses.
