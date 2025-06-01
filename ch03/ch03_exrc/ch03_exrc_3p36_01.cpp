@@ -39,7 +39,7 @@ int main() {
     bool equal = true;
     auto len2 = end(arr2) - begin(arr2);
     if (len2 == end(arr2) - begin(arr2)) {
-        for (decltype(len2) i = 0; i < len2; i++) {
+        for (decltype(len2) i = 0; i < len2; ++i) {
             if (arr1[i] != arr2[i]) {
                 equal = false;
             }
@@ -55,7 +55,7 @@ int main() {
 
     equal = true;
     if (len2 == end(arr3) - begin(arr3)) {
-        for (decltype(len2) i = 0; i < len2; i++) {
+        for (decltype(len2) i = 0; i < len2; ++i) {
             if (arr2[i] != arr3[i]) {
                 equal = false;
             }
@@ -71,7 +71,7 @@ int main() {
 
     equal = true;
     if (len2 == end(arr4) - begin(arr4)) {
-        for (decltype(len2) i = 0; i < len2; i++) {
+        for (decltype(len2) i = 0; i < len2; ++i) {
             if (arr2[i] != arr4[i]) {
                 equal = false;
             }

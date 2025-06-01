@@ -25,7 +25,7 @@ int main() {
     int i = 0;
     for (const auto &a: vstr) {
         cout << a;
-        i++;
+        ++i;
         if (i == 8) {
             cout << endl;
             i = 0;
@@ -46,7 +46,7 @@ int main() {
     i = 0;
     for (const auto &a: vstr) {
         cout << a;
-        i++;
+        ++i;
         if (i == 8) {
             cout << endl;
             i = 0;

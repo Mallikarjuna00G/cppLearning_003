@@ -16,7 +16,7 @@ int main() {
     decltype(str.size()) i = 0;
     while (i < str.size()) {
         str[i] = 'X';
-        i++;
+        ++i;
     }
 
     cout << "Now it is: " << str << endl;

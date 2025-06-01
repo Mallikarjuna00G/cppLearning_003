@@ -12,7 +12,7 @@ int main() {
     vector<int> varr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     int arr[len];
 
-    for (decltype(varr.size()) i = 0; i < varr.size(); i++) {
+    for (decltype(varr.size()) i = 0; i < varr.size(); ++i) {
         arr[i] = varr[i];
         cout << arr[i] << " ";
     }

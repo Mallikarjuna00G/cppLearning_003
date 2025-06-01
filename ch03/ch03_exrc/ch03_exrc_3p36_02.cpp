@@ -40,7 +40,7 @@ int main() {
 
     bool equal = true;
     if (arr1.size() == arr2.size()) {
-        for (decltype(arr1.size()) i = 0; i < arr1.size(); i++) {
+        for (decltype(arr1.size()) i = 0; i < arr1.size(); ++i) {
             if (arr1[i] != arr2[i]) {
                 equal = false;
             }
@@ -56,7 +56,7 @@ int main() {
 
     equal = true;
     if (arr2.size() == arr3.size()) {
-        for (decltype(arr2.size()) i = 0; i < arr2.size(); i++) {
+        for (decltype(arr2.size()) i = 0; i < arr2.size(); ++i) {
             if (arr2[i] != arr3[i]) {
                 equal = false;
             }
@@ -72,7 +72,7 @@ int main() {
 
     equal = true;
     if (arr2.size() == arr3.size()) {
-        for (decltype(arr2.size()) i = 0; i < arr2.size(); i++) {
+        for (decltype(arr2.size()) i = 0; i < arr2.size(); ++i) {
             if (arr2[i] != arr4[i]) {
                 equal = false;
             }

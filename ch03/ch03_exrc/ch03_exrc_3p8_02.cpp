@@ -13,7 +13,7 @@ int main() {
     
     cout << "You entered: " << str << endl;
 
-    for (decltype(str.size()) i = 0; i < str.size(); i++) {
+    for (decltype(str.size()) i = 0; i < str.size(); ++i) {
         str[i] = 'X';
     }
 

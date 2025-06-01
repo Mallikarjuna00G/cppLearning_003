@@ -11,7 +11,7 @@ int main() {
     int ia[arr_size] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 
-    for (auto i = 0u; i < arr_size; i++) {
+    for (auto i = 0u; i < arr_size; ++i) {
         cout << ia[i] << " ";
     }
     cout << endl;
