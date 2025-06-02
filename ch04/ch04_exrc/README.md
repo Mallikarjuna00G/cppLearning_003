@@ -251,3 +251,149 @@ Exercise 4.19: Given that `ptr` points to an `int`, that `vec` is a `vector<int>
 * **Correction:** To avoid undefined behavior, you must explicitly sequence the operations. For example:
     * `vec[ival] <= vec[ival + 1]; ival++;` (If the intent was to compare the current element with the next, then advance `ival`).
     * Or, if `ival` needs to be incremented first for both: `++ival; vec[ival-1] <= vec[ival];` (though `vec[ival-1]` might be messy).
+
+## ch04_exrc_4p20
+
+Exercise 4.20: Assuming that `iter` is a `vector<string>::iterator`, indicate which, if any, of the following expressions are legal. Explain the behavior of the legal expressions and why those that aren’t legal are in error.
+
+Let's break down each expression, assuming `iter` is a `std::vector<std::string>::iterator`, meaning `*iter` gives you a `std::string` object.
+
+**(a) `*iter++;`**
+* **Legal.**
+* **Behavior:** This is a common pattern. It first **dereferences** the `std::string` object that `iter` *currently* points to (yielding the string itself). *Then*, `iter` is advanced to the next element in the vector. The overall expression yields the string that was at `iter`'s original position.
+* **Brief:** It **does** first dereference the current item and then advance.
+
+**(b) `(*iter)++;`**
+* **Illegal.**
+* **Reason:** `(*iter)` yields a `std::string` object. The `std::string` class does **not** have a built-in `operator++` (increment operator). You cannot increment a string.
+
+**(c) `*iter.empty()`**
+* **Illegal.**
+* **Reason:** The dot operator (`.`) has higher precedence than the dereference operator (`*`). So, it attempts `iter.empty()`. However, `iter` (the iterator itself) does not have an `empty()` member function. Even if it did, trying to dereference a `bool` result (`*true` or `*false`) would be an error.
+
+**(d) `iter->empty();`**
+* **Legal.**
+* **Behavior:** This uses the `->` operator to dereference `iter` and then calls the `empty()` member function on the `std::string` object that `iter` points to. This returns `true` if the string itself is empty, `false` otherwise.
+
+**(e) `++*iter;`**
+* **Illegal.**
+* **Reason:** `*iter` yields a `std::string` object. Similar to (b), the `std::string` class does **not** have a built-in `operator++`. You cannot increment a string.
+
+**(f) `iter++->empty();`**
+* **Legal.**
+* **Behavior:** This expression is legal due to operator precedence. `iter++` is evaluated first, which returns a temporary iterator that points to `iter`'s *original* position. *Then*, `->empty()` is called on that temporary iterator to check if the `std::string` it points to is empty. Finally, `iter` itself is advanced to the next element.
+
+## ch04_exrc_4p22
+
+**NOTE: Full taken from gemini 2.5**
+
+The **`if-else if-else` version is generally easier to understand** for this type of conditional logic.
+
+**Why:**
+
+1.  **Clarity of Flow:** The `if-else if-else` structure directly mirrors how humans think about sequential conditions: "If this is true, do X. Otherwise, if *this other thing* is true, do Y. Otherwise, if *yet another thing* is true, do Z. If none of the above, do W."
+2.  **Explicit Scoping:** Each condition and its corresponding action are clearly defined in their own block, making it easy to see which grade range corresponds to which result.
+3.  **Readability for Nested Logic:** Nested ternary operators, while concise, can become very difficult to read and debug as the nesting deepens. It requires more mental effort to correctly parse which `?` belongs to which `:` and what implied ranges are being covered. The order of evaluation in the ternary is crucial and less obvious at a glance.
+4.  **Maintainability:** If you need to add another grade category or adjust a threshold, it's typically much simpler and less error-prone to modify an `if-else if-else` ladder than a deeply nested ternary.
+
+While the ternary version is compact, its conciseness often comes at the cost of immediate clarity for complex, multi-way decisions like this grading scale.
+
+## ch04_exrc_4p23
+
+Exercise 4.23: The following expression fails to compile due to operator precedence. Using Table 4.12 (p. 166), explain why it fails. How would you fix it?
+
+```cpp
+string s = "word";
+string pl = s + s[s.size() - 1] == 's' ? "" : "s" ;
+```
+
+**Explanation of Failure:**
+
+The expression fails to compile because the **equality operator (`==`) has higher precedence** than the conditional (ternary) operator (`? :`).
+
+Therefore, the compiler interprets the line as:
+`string pl = (s + s[s.size() - 1] == 's') ? "" : "s";`
+
+1.  `s.size() - 1`: Calculates the index of the last character.
+2.  `s[s.size() - 1]`: Accesses the last character of `s` (e.g., 'd' for "word").
+3.  `s + s[s.size() - 1]`: Concatenates the string `s` with that last character (e.g., "word" + 'd' results in the temporary string `"wordd"`).
+4.  `("wordd") == 's'`: This is the **compile-time error**. You cannot directly compare a `std::string` object (like `"wordd"`) with a `char` (like `'s'`) using the `==` operator.
+
+**How to Fix It (assuming typical pluralization intent):**
+
+If the intention is to add "s" to `s` *only if* `s` does not already end in "s", you need to parenthesize the conditional operation to ensure it applies to the plural suffix, not the entire string:
+
+```cpp
+string pl = s + (s[s.size() - 1] == 's' ? "" : "s");
+```
+
+**Explanation of Fix:**
+
+The parentheses `(s[s.size() - 1] == 's' ? "" : "s")` force the conditional logic to be evaluated first. This results in either an empty string `""` or the string `"s"`. This resulting string is then correctly concatenated with `s`.
+
+## ch04_exrc_4p24
+
+Exercise 4.24: Our program that distinguished between high pass, pass, and fail depended on the fact that the conditional operator is right associative. Describe how that operator would be evaluated if the operator were left associative.
+
+The conditional operator (`? :`) takes three parts: `Condition ? Value_if_True : Value_if_False`.
+
+**Original (Right-Associative) Way (How C++ works):**
+
+`C1 ? V1 : C2 ? V2 : V3` is read as `C1 ? V1 : ( C2 ? V2 : V3 )`
+
+1.  C++ evaluates the **innermost** conditional `(C2 ? V2 : V3)` first. This produces either `V2` or `V3`.
+2.  Then, it evaluates `C1 ? V1 : (result from step 1)`.
+
+This works because `C1` and `C2` are **conditions** (true/false), and `V1, V2, V3` are **values**.
+
+**If `? :` Were Left-Associative:**
+
+`C1 ? V1 : C2 ? V2 : V3` would be read as `( C1 ? V1 : C2 ) ? V2 : V3`
+
+1.  C++ would first evaluate the **leftmost** conditional: `(C1 ? V1 : C2)`.
+2.  This sub-expression would produce either `V1` (if `C1` is true) or `C2` (if `C1` is false).
+    * In the code, `V1` is `"high pass"` (a string).
+    * `C2` is `(grade > 75)` (a boolean condition).
+
+3.  The problem arises in the next step: The result from step 1 (`V1` or `C2`) would then become the **new `Condition`** for the rest of the expression:
+    `(result from step 1) ? V2 : V3`
+
+4.  If `grade` was `95`, `C1` (`grade > 90`) is true, so `(C1 ? V1 : C2)` would evaluate to `"high pass"` (a `std::string`). The expression would then try to do: `"high pass" ? V2 : V3`.
+
+**The confusion and error:** In C++, we **cannot use a `std::string` directly as a boolean condition** (like `if ("high pass")` or `"high pass" ? ...`). Only types like `bool`, integers, or pointers can be implicitly converted to `bool` for conditions.
+
+So, if `? :` were left-associative, our code would cause a **compile-time error** because it would try to use a `std::string` as a condition.
+
+## ch04_exrc_4p25
+
+Exercise 4.25: What is the value of `~'q' << 6` on a machine with 32-bit `int`s and 8 bit `char`s, that uses Latin-1 character set in which `'q'` has the bit pattern `01110001`?
+
+- `'q'` is `01110001` in 8-bits.
+- `'q'` is `00000000000000000000000001110001` in 32-bits.
+- `~'q'` is `11111111111111111111111110001110` in 32-bits.
+- `~'q' << 6` is `11111111111111111110001110000000` in 32-bits.
+- The value will be `0xFFFFF8E0`.
+
+## ch04_exrc_4p26
+
+Exercise 4.26: In our grading example in this section, what would happen if we used `unsigned int` as the type for `quiz1`?
+
+- As mentioned in the book, `int`s are guaranteed to have 16 bits.
+- We cannot use it to track the grades of more than 16 students.
+- Even though the promotion from small integer to larger integral type occurs during the bitwise operation, the evaluated value is lost while saving back to the variable `quiz1`.
+
+## ch04_exrc_4p27
+
+Exercise 4.27: What is the result of each of these expressions?
+
+```cpp
+unsigned long ul1 = 3, ul2 = 7;
+```
+
+(a) `ul1 & ul2`: The final value will be 3.
+
+(b) `ul1 | ul2`: The final value will be 7.
+
+(c) `ul1 && ul2`: The final value will be `true` (boolean)
+
+(d) `ul1 || ul2`: The final value will be `true` (boolean)
