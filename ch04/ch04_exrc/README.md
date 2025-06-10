@@ -397,3 +397,143 @@ unsigned long ul1 = 3, ul2 = 7;
 (c) `ul1 && ul2`: The final value will be `true` (boolean)
 
 (d) `ul1 || ul2`: The final value will be `true` (boolean)
+
+
+## ch04_exrc_4p28
+
+```cpp
+$ ./perform.sh 2
+Executing './a.out'...
+sizeof (bool): 1
+sizeof (char): 1
+sizeof (wchar_t): 4
+sizeof (char16_t): 2
+sizeof (char32_t): 4
+sizeof (short): 2
+sizeof (int): 4
+sizeof (long): 8
+sizeof (long long): 8
+sizeof (float): 4
+sizeof (double): 8
+sizeof (long double): 16
+
+--------------------------
+Last execution status: 0
+```
+
+## ch04_exrc_4p10
+
+Exercise 4.29: Predict the output of the following code and explain your reasoning. Now run the program. Is the output what you expected? If not, figure out why.
+
+```cpp
+int x[10]; int *p = x;
+cout << sizeof(x)/sizeof(*x) << endl;
+cout << sizeof(p)/sizeof(*p) << endl;
+```
+
+Compilation: 
+
+```cpp
+$ ./perform.sh 
+Compiling 'ch04_exrc_4p29.cpp' using g++ with C++11 standard...
+g++ -std=c++11 -Wall ch04_exrc_4p29.cpp -o a.out
+ch04_exrc_4p29.cpp: In function ‘int main()’:
+ch04_exrc_4p29.cpp:9:22: warning: division ‘sizeof (int*) / sizeof (int)’ does not compute the number of array elements [-Wsizeof-pointer-div]
+    9 |     cout << sizeof(p)/sizeof(*p) << endl;
+      |             ~~~~~~~~~^~~~~~~~~~~
+ch04_exrc_4p29.cpp:7:21: note: first ‘sizeof’ operand was declared here
+    7 |     int x[10]; int *p = x;
+      |                     ^
+Compilation successful. Executable created: 'a.out'
+```
+
+Execution:
+```
+$ ./perform.sh 2
+Executing './a.out'...
+10
+2
+
+--------------------------
+Last execution status: 0
+```
+
+## ch04_exrc_4p30
+
+Exercise 4.30: Using Table 4.12 (p. 166), parenthesize the following expressions to match the default evaluation:
+
+(a) `sizeof x + y`: `(sizeof (x)) + y`
+
+(b) `sizeof p->mem[i]`: `sizeof (p->mem[i])`
+
+(c) `sizeof a < b`: `(sizeof (a)) < b`
+
+(d) `sizeof f()`: `sizeof (f())`
+
+## ch04_exrc_4p31
+
+Exercise 4.31: The program in this section used the prefix increment and decrement operators. Explain why we used prefix and not postfix. What changes would have to be made to use the postfix versions? Rewrite the program using postfix operators.
+
+Given code:
+
+```cpp
+vector<int>::size_type cnt = ivec.size();
+// assign values from size . . . 1 to the elements in ivec
+for(vector<int>::size_type ix = 0; ix != ivec.size(); ++ix, --cnt)
+    ivec[ix] = cnt;
+```
+
+The reason is simple: 
+- The prefix version avoids unnecessary work. It increments the value and returns the incremented version. 
+- The postfix operator must store the original value so that it can return the unincremented value as its result. If we don’t need the unincremented value, there’s no need for the extra work done by the postfix operator.
+
+Code with postfix operators:
+
+```cpp
+vector<int>::size_type cnt = ivec.size();
+// assign values from size . . . 1 to the elements in ivec
+for(vector<int>::size_type ix = 0; ix != ivec.size(); ix++, cnt--)
+    ivec[ix] = cnt;
+```
+
+## ch04_exrc_4p32
+
+Exercise 4.32: Explain the following loop.
+
+```cpp
+constexpr int size = 5;
+int ia[size] = {1,2,3,4,5};
+
+for (int *ptr = ia, ix = 0; ix != size && ptr != ia + size; ++ix, ++ptr) { 
+    /* . . . */ 
+}
+```
+
+This `for` loop iterates through the `ia` array.
+
+1.  **Initialization:**
+    * `ptr` is initialized to point to the first element of `ia` (`ia[0]`).
+    * `ix` is initialized to `0`.
+2.  **Conditions:** The loop continues as long as *both* `ix` has not reached `size` (i.e., `ix < 5`) **AND** `ptr` has not reached the "one-past-the-end" address of the array (`ia + 5`).
+3.  **Increment:** In each iteration, both `ix` (the integer index) and `ptr` (the pointer) are advanced to the next element/index.
+
+Essentially, `ptr` and `ix` iterate in lockstep over the `size` elements of the array. The two conditions (`ix != size` and `ptr != ia + size`) are **redundant** because they will always become false at the same time given how they are initialized and incremented. The loop will execute `size` times.
+
+## ch04_exrc_4p33
+
+Exercise 4.33: Using Table 4.12 (p. 166) explain what the following expression does:
+
+```cpp
+someValue ? ++x, ++y : --x, --y
+```
+
+1.  **Comma Operator Precedence:** The comma operator (`,`) has **lower precedence** than the conditional operator (`? :`).
+
+2.  **Default Evaluation:** Due to this precedence, the expression `someValue ? ++x, ++y : --x, --y` is parsed by default as:
+    ` ( (someValue ? ++x : --x) , ++y ) , --y `
+
+3.  **What actually happens:**
+    * First, `x` is either incremented (`++x`) if `someValue` is true, or decremented (`--x`) if `someValue` is false.
+    * Then, `y` is **incremented** (`++y`).
+    * Finally, `y` is **decremented** (`--y`).
+    * The overall effect is that `x` changes based on `someValue`, but `y` ends up with its **original value** (incremented then immediately decremented).
