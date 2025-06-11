@@ -537,3 +537,76 @@ someValue ? ++x, ++y : --x, --y
     * Then, `y` is **incremented** (`++y`).
     * Finally, `y` is **decremented** (`--y`).
     * The overall effect is that `x` changes based on `someValue`, but `y` ends up with its **original value** (incremented then immediately decremented).
+
+## ch04_exrc_4p34
+
+Exercise 4.34: Given the variable definitions in this section, explain what conversions take place in the following expressions:
+
+Remember that you may need to consider the associativity of the operators.
+
+(a) `if (fval)`: Since it is in the place of condition, `fval` is converted to `bool`. If `fval` is `0` then the condition meets `false` otherwise `true`.
+
+(b) `dval = fval + ival;`: `ival` is converted to `float` for the addition operation. Then the value of the summation is converted to `double` during assignment.
+
+(c) `dval + ival * cval;`: The evaluation goes like, `dval + (ival * cval);` (which have the form `double + (int * char);`). Therefore, conversions will be like, `double + (int * int)` -> `double + (int)` -> `double + (double)` -> `double`.
+
+Declarations were as follows:
+
+```cpp
+bool flag; 
+short sval; 
+int ival; 
+long lval; 
+float fval; 
+
+char cval;
+unsigned short usval;
+unsigned int uival;
+unsigned long ulval;
+double dval;
+```
+
+## ch04_exrc_4p35
+
+Exercise 4.35: Given the following definitions,
+
+```cpp
+char cval;
+int ival;
+unsigned int ui;
+float fval;
+double dval;
+```
+
+identify the implicit type conversions, if any, taking place:
+
+(a) `cval = ’a’ + 3;`: Implicit type conversion occurs.
+- `char = char + int`
+- `char = int + int`: (`char` becomes `int` for addition)
+- `char = int`
+- `char = char`: (`int` becomes `char` for assignment)
+
+(b) `fval = ui - ival * 1.0;`: Implicit type conversions occur.
+- `float = unsigned int - int * double;`
+- `float = unsigned int - (int * double);`: Multiplication is performed first due to operator precedence.
+- `float = unsigned int - (double * double);`: First operand of Multiplication operation becomes `double`.
+- `float = unsigned int - (double)`: Result of the multiplication operation results in `double`.
+- `float = double - (double)`: For the subtraction operation `unsigned int` is converted to `double`.
+- `float = double`: Result of the subtraction operation is `double`.
+- `float = float`: The the `double` is converted to `float` for the assignment.
+
+(c) `dval = ui * fval;`: Implicit type conversions occur.
+- `double = unsigned int * float;`
+- `double = float * float;`: `unsigned int` is converted to `float` for multiplication operation.
+- `double = float;`: The multiplication operation results in `float`.
+- `double = double;`: The RHS gets propmoted to `double` from `float` during assignment.
+
+
+(d) `cval = ival + fval + dval;`: Implicit conversions occur.
+- `char = int + float + double;`
+- `char = (int + float) + double;`: Representing order of operation.
+- `char = (float + float) + double;`: `int` gets converted to `float` for addition operation.
+- `char = (float) + double;`: The summation results in `float`.
+- `char = (double) + double;`: `float` gets promoted to `double` for addition operation.
+- `char = double;`: The summation results in `double`.
+- `char = char;`: For the assignment operation, `double` get converted (truncated) to `char`.
