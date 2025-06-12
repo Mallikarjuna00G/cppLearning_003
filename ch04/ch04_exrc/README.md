@@ -610,3 +610,45 @@ identify the implicit type conversions, if any, taking place:
 - `char = (double) + double;`: `float` gets promoted to `double` for addition operation.
 - `char = double;`: The summation results in `double`.
 - `char = char;`: For the assignment operation, `double` get converted (truncated) to `char`.
+
+## ch04_exrc_4p36
+
+Exercise 4.36: Assuming `i` is an `int` and `d` is a `double` write the expression `i *= d` so that it does integral, rather than floating-point, multiplication.
+
+```cpp
+i *= static_cast<int> d;
+```
+
+## ch04_exrc_4p37
+
+Exercise 4.37: Rewrite each of the following old-style casts to use a named cast:
+
+```cpp
+int i;
+double d;
+const string *ps;
+char *pc;
+void *pv;
+```
+
+(a) `pv = (void*)ps;`: `pv = const_cast<void*>ps;`
+
+(b) `i = int(*pc);`: `i = static_cast<int>(*pc);`
+
+(c) `pv = &d;`: `pv = static_cast<void*>(&d);`
+
+(d) `pc = (char*) pv;`: `pc = static_cast<char*> pv;`
+
+## ch04_exrc_4p38
+
+Exercise 4.38: Explain the following expression:
+
+```cpp
+double slope = static_cast<double>(j/i);
+```
+
+- Due to operator precedence, the content within the parentheses get evaluated.
+- Say, `j/i` get evaluated to some value `x`.
+- `x` get type casted to `double` due to `static_cast<double>(x)`.
+- Then, the typecasted value gets assigned to the `double` variable `slope`.
+
