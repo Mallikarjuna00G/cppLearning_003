@@ -17,3 +17,5 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 [ch03](./ch03/): Strings, Vectors, and Arrays
 
 [ch04](./ch04/): Expressions
+
+[ch05](./ch05/): Statements
