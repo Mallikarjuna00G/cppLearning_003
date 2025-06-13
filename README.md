@@ -19,3 +19,5 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 [ch04](./ch04/): Expressions
 
 [ch05](./ch05/): Statements
+
+[ch06](./ch06/): Functions

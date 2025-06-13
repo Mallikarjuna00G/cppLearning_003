@@ -1,3 +1,4 @@
+*.o
 a.out
 temp.cpp
 ifile.txt
