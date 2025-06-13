@@ -325,3 +325,213 @@ switch(swt) {
         break;
 }
 ```
+
+## ch05_exrc_5p15
+
+Exercise 5.15: Explain each of the following loops. Correct any problems you detect.
+
+(a) 
+
+```cpp
+for (int ix = 0; ix != sz; ++ix) { /* . . . */ }
+if (ix != sz)
+// . . .
+```
+
+- First issue is we do not know what `sz` is.
+- Second, `ix` is not visible to `if` condition.
+- Even if `ix` is declared before the `for` loop, the `if` condition check always fails and its body is never executed. Because the control stays in the loop as long as `ix != sz` and the loop stops only when `ix` is same as `sz`. And again the code is checking if `ix != sz` which is impossible.
+
+```cpp
+for (int ix = 0; ix != sz; ++ix) { /* . . . */ }
+// if statement is removed as it is redundant
+```
+
+(b) 
+
+```cpp
+int ix;
+for (ix != sz; ++ix) { /* . . . */ }
+```
+
+- Wrong. No initialization statement.
+
+**Correction:**
+```cpp
+int ix;
+for (;ix != sz; ++ix) { /* . . . */ }
+```
+
+(c) 
+
+```cpp
+for (int ix = 0; ix != sz; ++ix, ++sz) { /* . . . */ }
+```
+
+- The loop will be a infinite loop unless `sz` is already having the value `0` just before the `for` loop.
+- Correction cannot be provided unless the requirements are clear.
+
+## ch05_exrc_5p16
+
+Exercise 5.16: The `while` loop is particularly good at executing while some condition holds; for example, when we need to read values until end-of-file. The `for` loop is generally thought of as a step loop: An index steps through a range of values in a collection. Write an idiomatic use of each loop and then rewrite each using the other loop construct. If you could use only one loop, which would you choose? Why?
+
+**1. Idiomatic `while` loop:**
+Reads integers from input until end-of-file.
+```cpp
+#include <iostream>
+int val, sum = 0;
+while (std::cin >> val) { // Condition: input success
+    sum += val;
+}
+// std::cout << "Sum: " << sum << std::endl;
+```
+**`while` loop rewritten as a `for` loop:**
+```cpp
+#include <iostream>
+int val, sum = 0;
+for (; std::cin >> val; ) { // Initialization and update parts are empty
+    sum += val;
+}
+// std::cout << "Sum: " << sum << std::endl;
+```
+
+**2. Idiomatic `for` loop:**
+Iterates through elements of a `std::vector` using an index.
+```cpp
+#include <vector>
+#include <iostream>
+std::vector<int> nums = {1, 2, 3, 4, 5};
+for (size_t i = 0; i < nums.size(); ++i) { // Initialization, condition, update all in one line
+    std::cout << nums[i] << " ";
+}
+// std::cout << std::endl;
+```
+**`for` loop rewritten as a `while` loop:**
+```cpp
+#include <vector>
+#include <iostream>
+std::vector<int> nums = {1, 2, 3, 4, 5};
+size_t i = 0; // Initialization outside
+while (i < nums.size()) { // Condition
+    std::cout << nums[i] << " ";
+    ++i; // Update inside the loop body
+}
+// std::cout << std::endl;
+```
+
+**Which loop would you choose? Why?**
+
+If I could use only one loop, I would choose the **`while` loop**.
+
+**Reason:** Any `for` loop can be mechanically rewritten as a `while` loop (as shown above), making `while` more fundamental and universally applicable. The `while` loop's simpler structure (just a condition) makes it more flexible for scenarios where iteration doesn't neatly fit the "initialize, test, update" pattern, such as reading from input streams or iterating based on external events.
+
+
+## ch05_exrc_5p18
+
+Exercise 5.18: Explain each of the following loops. Correct any problems you detect.
+
+(a) 
+
+```cpp
+do
+    int v1, v2;
+    cout << "Please enter two numbers to sum:" ;
+    if (cin >> v1 >> v2)
+        cout << "Sum is: " << v1 + v2 << endl;
+while (cin);
+```
+
+- Since there are multiple statements meant to execute for `do-while` loop, the braces need to be written.
+- The intention is to get two integers, find the sum of them and print to console. This process shall repeat as long as the provided inputs are valid.
+
+**Correction:**
+
+```cpp
+do {
+    int v1, v2;
+    cout << "Please enter two numbers to sum:" ;
+    if (cin >> v1 >> v2)
+        cout << "Sum is: " << v1 + v2 << endl;
+} while (cin);
+```
+
+
+(b) 
+
+```cpp
+do {
+    // . . .
+} while (int ival = get_response());
+```
+
+- Having a variable declaration in `do-while` condition results in compilation error.
+- Declare any variable that will be used in the condition of `do-while` before the `do-while` statement.
+
+**Correction:**
+
+```cpp
+int ival;
+do {
+    // . . .
+} while (ival = get_response());
+```
+
+
+(c) 
+
+```cpp
+do {
+    int ival = get_response();
+}
+```
+
+- This is an invalid syntax.
+- This is supposed to be a `do-while` statement.
+- The variable which is supposed to be used in the `do-while` condition shall be declared before the `do-while` statement.
+
+**Correction:**
+
+```cpp
+int ival;
+do {
+    // do something
+} while (ival = get_response());
+```
+
+## ch05_exrc_5p22
+
+Exercise 5.22: The last example in this section that jumped back to `begin` could be better written using a loop. Rewrite the code to eliminate the `goto`.
+
+**Given code:**
+
+```cpp
+// backward jump over an initialized variable definition is okay
+begin:
+    int sz = get_size();
+    if (sz <= 0) {
+        goto begin;
+    }
+```
+
+**Rewritten code:**
+
+```cpp
+// backward jump over an initialized variable definition is okay
+while (true) {
+    int sz = get_size();
+    if (sz <= 0) {
+        continue;
+    }
+    break;
+}
+```
+
+OR
+
+```cpp
+// backward jump over an initialized variable definition is okay
+int sz;
+while ((sz = get_size()) <= 0) {
+    
+}
+```
