@@ -535,3 +535,41 @@ while ((sz = get_size()) <= 0) {
     
 }
 ```
+
+## ch05_exrc_5p24
+
+With 
+
+```cpp
+throw exception();
+```
+
+```console
+$ ./perform.sh 3
+Executing './a.out'... <ifile.txt
+Enter two integers to perform divsion operation: 
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+./perform.sh: line 55:  4177 Aborted                 (core dumped) ./"$EXECUTABLE_NAME" < ifile.txt
+
+--------------------------
+Last execution status: 134
+```
+
+With 
+
+```cpp
+throw runtime_error("Division by zero.!!");
+```
+
+```console
+$ ./perform.sh 3
+Executing './a.out'... <ifile.txt
+Enter two integers to perform divsion operation: 
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  Division by zero.!!
+./perform.sh: line 55:  4302 Aborted                 (core dumped) ./"$EXECUTABLE_NAME" < ifile.txt
+
+--------------------------
+Last execution status: 134
+```
