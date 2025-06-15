@@ -282,3 +282,139 @@ Exercise 6.20: When should reference parameters be references to `const`? What h
     * **Loss of Flexibility:** The function will be unable to accept `const` objects, temporary objects, or literals as arguments, thus limiting its usability.
     * **Misleading Intent:** It implies that the function *might* modify the argument, even if it doesn't.
 
+## ch06_exrc_6p21
+
+Exercise 6.21: Write a function that takes an `int` and a pointer to an `int` and returns the larger of the `int` value or the value to which the pointer points. What type should you use for the pointer?
+
+[ch06_exrc_6p21](./ch06_exrc_6p21/)
+
+- The type of the pointer shall be `int *`.
+- Since we are not going to modify the parameters we are making them `const` parameters.
+
+## ch06_exrc_6p24
+
+Exercise 6.24: Explain the behavior of the following function. If there are problems in the code, explain what they are and how you might fix them.
+
+```cpp
+void print(const int ia[10])
+{
+    for (size_t i = 0; i != 10; ++i)
+        cout << ia[i] << endl;
+}
+```
+
+- First dimension is ignored from the array parameter. So, if the argument array has less than 10 items, we will face a run time error (out-of-range).
+
+- The function should expect the size of the array and accordingly modify the condition statement in the `for `loop.
+
+```cpp
+void print(const int ia[], size_t size)
+{
+    for (size_t i = 0; i != size; ++i)
+        cout << ia[i] << endl;
+}
+```
+
+## ch06_exrc_6p28
+
+Exercise 6.28: In the second version of `error_msg` that has an `ErrCode` parameter, what is the type of `elem` in the `for` loop?
+
+```cpp
+void error_msg(ErrCode e, initializer_list<string> il)
+{
+    cout << e.msg() << ": ";
+    for (const auto &elem : il)
+        cout << elem << " " ;
+    cout << endl;
+}
+```
+
+- `elem` is a `const` reference to a `string` element.
+
+## ch06_exrc_6p29
+
+Exercise 6.29: When you use an `initializer_list` in a range `for` would you ever use a reference as the loop control variable? If so, why? If not, why not?
+
+Yes, we would.
+
+**Why:** To **avoid unnecessary copying** of elements. Iterating by `const` reference (`const auto &elem`) is more efficient, especially for large objects like `std::string`, as it prevents a copy from being made for each iteration. Since `initializer_list` elements are always `const`, `const` reference is the only appropriate reference type.
+
+## ch06_exrc_6p30
+
+Exercise 6.30: Compile the version of `str_subrange` as presented on page 223 to see what your compiler does with the indicated errors.
+
+```console
+$ g++ -c strSubrange.cpp 
+strSubrange.cpp: In function ‘bool str_subrange(const std::string&, const std::string&)’:
+strSubrange.cpp:18:13: error: return-statement with no value, in function returning ‘bool’ [-fpermissive]
+   18 |             return; // error #1: no return value; compiler should detect this error
+      |             ^~~~~~
+
+```
+
+## ch06_exrc_6p31
+
+Exercise 6.31: When is it valid to return a reference? A reference to `const`?
+
+* **Return `T&` (non-`const` reference):** Valid when returning an **lvalue that will definitely persist** *after* the function returns (e.g., a member of an object passed by reference, an element of a container, or a static/global variable). This allows callers to modify the original object.
+
+* **Return `const T&` (`const` reference):** Valid for returning an **lvalue that will definitely persist** *after* the function returns, but where the caller **should not modify it**. This is common for providing read-only access to members or elements, avoiding copies while maintaining `const`-correctness.
+
+## ch06_exrc_6p32
+
+Exercise 6.32: Indicate whether the following function is legal. If so, explain what it does; if not, correct any errors and then explain it.
+
+```cpp
+int &get(int *arry, int index) { return arry[index]; }
+
+int main() {
+    int ia[10];
+    
+    for (int i = 0; i != 10; ++i)
+        get(ia, i) = i;
+}
+```
+
+- It is valid.
+- The function returns non-`const` reference to each of the index of the array. And then we are assigning `i` value to those positions of the array.
+- By the end, the array `ia` will have `{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}`. 
+
+## ch06_exrc_6p34
+
+Exercise 6.34: What would happen if the stopping condition in `factorial` were
+
+```cpp
+if (val != 0)
+```
+
+`factorial` code was:
+
+```cpp
+// calculate val!, which is 1 * 2 * 3 . . . * val
+int factorial(int val)
+{
+    if (val > 1)
+        return factorial(val-1) * val;
+    return 1;
+}
+```
+
+- The function will call itself one more time, returning 1 again. But will not go into infinite loop.
+- But the only condition is that the parameter shall never be less than 0. If it is, the inifinite looping starts.
+
+
+## ch06_exrc_6p35
+
+Exercise 6.35: In the call to `factorial`, why did we pass `val - 1` rather than `val--`?
+
+```cpp
+// calculate val!, which is 1 * 2 * 3 . . . * val
+int factorial(int val)
+{
+    if (val > 1)
+        return factorial(val-1) * val;
+    return 1;
+}
+```
+
+`val - 1` is used because `val--` (postfix decrement) would pass the *original* value of `val` to the recursive call, leading to **infinite recursion**. Using `val - 1` explicitly passes the decremented value without modifying `val` in the same expression, ensuring clarity and correct recursive behavior.

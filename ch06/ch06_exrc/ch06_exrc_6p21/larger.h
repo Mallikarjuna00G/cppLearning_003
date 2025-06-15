@@ -1,0 +1,1 @@
+int larger(const int a, const int *const b);

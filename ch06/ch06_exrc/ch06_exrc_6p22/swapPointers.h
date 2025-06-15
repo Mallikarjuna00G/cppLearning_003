@@ -1,0 +1,1 @@
+void swapPointers(int *&a, int *&b);
