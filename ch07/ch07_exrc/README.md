@@ -30,3 +30,4 @@ if (read(read(cin, data1), data2))
 
 - First, `read(cin, data1)` is executed. If the read is successfull, in that place we will have a `istream` reference waiting for outer `read` (`read(cin, data2)`). If this `read` also succeeds, then the `if` condition passes.
 - If any of the reads fail then the `if` condition will also fail.
+

@@ -15,13 +15,13 @@ struct Sales_data {
 
     inline string isbn() const {return this->bookNo;};
     Sales_data& combine(const Sales_data &sd);
-
-    istream &read(istream &is, Sales_data &item);
-    ostream &print(ostream &os, const Sales_data &item) const;
-
+    
     inline double avg_price() const {return revenue / units_sold;}
-
-    Sales_data add(const Sales_data &lhs, const Sales_data &rhs) const;
+    
 };
+
+istream &read(istream &is, Sales_data &item);
+ostream &print(ostream &os, const Sales_data &item);
+Sales_data add(const Sales_data &lhs, const Sales_data &rhs);
 
 #endif

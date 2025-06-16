@@ -12,9 +12,9 @@ using std::exception;
 int main() {
 
     try {
-        Sales_data total; // variable to hold data for the next transaction
+        Sales_data total(cin); // variable to hold data for the next transaction
         // read the first transaction and ensure that there are data to process
-        if (read(cin, total)) {
+        if (cin) {
             Sales_data trans; // variable to hold the running sum
             // read and process the remaining transactions
             while (read(cin, trans)) {

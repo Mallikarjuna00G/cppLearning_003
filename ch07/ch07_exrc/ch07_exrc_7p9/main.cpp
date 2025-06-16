@@ -15,8 +15,8 @@ int main() {
         if (true) {
             Person p;
 
-            p.read(cin, p);
-            p.print(cout, p);
+            read(cin, p);
+            print(cout, p);
         } else {
             // no input! terminate with error
             throw runtime_error("Soemthing went wrong");
