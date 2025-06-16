@@ -21,3 +21,5 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 [ch05](./ch05/): Statements
 
 [ch06](./ch06/): Functions
+
+[ch07](./ch07/): Classes
