@@ -345,8 +345,8 @@ Exercise 6.30: Compile the version of `str_subrange` as presented on page 223 to
 
 ```console
 $ g++ -c strSubrange.cpp 
-strSubrange.cpp: In function ‘bool str_subrange(const std::string&, const std::string&)’:
-strSubrange.cpp:18:13: error: return-statement with no value, in function returning ‘bool’ [-fpermissive]
+strSubrange.cpp: In function ‘bool str_subrange(const std::string&, const std::string&)':
+strSubrange.cpp:18:13: error: return-statement with no value, in function returning ‘bool' [-fpermissive]
    18 |             return; // error #1: no return value; compiler should detect this error
       |             ^~~~~~
 
@@ -418,3 +418,410 @@ int factorial(int val)
 ```
 
 `val - 1` is used because `val--` (postfix decrement) would pass the *original* value of `val` to the recursive call, leading to **infinite recursion**. Using `val - 1` explicitly passes the decremented value without modifying `val` in the same expression, ensuring clarity and correct recursive behavior.
+
+## ch06_exrc_6p36
+
+Exercise 6.36: Write the declaration for a function that returns a reference to an array of ten strings, without using either a trailing return, `decltype`, or a type alias.
+
+```cpp
+string (&func())[10];
+```
+
+## ch06_exrc_6p37
+
+Exercise 6.37: Write three additional declarations for the function in the previous exercise. One should use a type alias, one should use a trailing return, and the third should use `decltype`. Which form do you prefer and why?
+
+1. 
+
+```cpp
+// reference to an array of ten strings
+using strRef = string (&)[10];
+
+strRef func();
+```
+
+2. 
+
+```cpp
+auto func() -> string (&)[10];
+```
+
+3. 
+
+```cpp
+string s[10];
+string (&sr)[10] = s;
+
+decltype(sr) func();
+```
+
+I think I prefer type alias because for me it is easier to grasp.
+
+## ch06_exrc_6p38
+
+Exercise 6.38: Revise the `arrPtr` function on to return a reference to the array.
+
+Given code:
+
+```cpp
+int odd[] = {1,3,5,7,9};
+int even[] = {0,2,4,6,8};
+
+// returns a pointer to an array of five int elements
+decltype(odd) *arrPtr(int i)
+{
+    return (i % 2) ? &odd : &even; // returns a pointer to the array
+}
+```
+
+Changed:
+
+```cpp
+int odd[] = {1,3,5,7,9};
+int even[] = {0,2,4,6,8};
+
+// returns a reference to an array of five int elements
+decltype(odd) &arrPtr(int i)
+{
+    return (i % 2) ? odd : even; // returns a reference to the array
+}
+```
+
+## ch06_exrc_6p39
+
+Exercise 6.39: Explain the effect of the second declaration in each one of the following sets of declarations. Indicate which, if any, are illegal.
+
+(a) 
+
+```cpp
+int calc(int, int);
+int calc(const int, const int);
+```
+
+- Top level `const` on objects do not create overloading. These two declarations are same.
+
+(b) 
+
+```cpp
+int get();
+double get();
+```
+
+- This results in compilation error. Function overloading is not possible just with difference in the return type.
+
+(c) 
+
+```cpp
+int *reset(int *);
+double *reset(double *);
+```
+
+- OK. Parameters are different.
+
+## ch06_exrc_6p40
+
+Exercise 6.40: Which, if either, of the following declarations are errors? Why?
+
+(a) 
+
+```cpp
+int ff(int a, int b = 0, int c = 0);
+```
+
+- This is fine.
+
+(b) 
+
+```cpp
+char *init(int ht = 24, int wd, char bckgrnd);
+```
+
+- Error. default arguments shall always come at the end in the argument list.
+
+## ch06_exrc_6p41
+
+Exercise 6.41: Which, if any, of the following calls are illegal? Why? Which, if any, are legal but unlikely to match the programmer's intent? Why?
+
+```cpp
+char *init(int ht, int wd = 80, char bckgrnd = ' ');
+```
+
+(a) `init();`
+
+- Incorrect. First argument is not a default argument. So atleast one arguments shall be passed.
+
+(b) `init(24,10);`
+
+- Fine. It will be called as `init(24, 10, ' ');`
+
+(c) `init(14, '*');`
+
+- Will not throw any error but might not match the intent of the programmer.
+- It will be called as `init(14, '*', ' ');`. The second argument that is being passed undergoes conversion to `int`. And it will be a valid conversion.
+
+## ch06_exrc_6p42
+
+Exercise 6.42: Give the second parameter of `make_plural` (§ 6.3.2, p. 224) a default argument of `'s'`. Test your program by printing singular and plural versions of the words `success` and `failure`.
+
+```cpp
+// return the plural version of word if ctr is greater than 1
+string make_plural(size_t ctr, const string &word, const string &ending)
+{
+    return (ctr > 1) ? word + ending : word;
+}
+```
+
+[ch06_exrc_6p42](./ch06_exrc_6p42/)
+
+## ch06_exrc_6p43
+
+Exercise 6.43: Which one of the following declarations and definitions would you put in a header? In a source file? Explain why.
+
+(a) `inline bool eq(const BigInt&, const BigInt&) {...}`
+
+- It is an `inline` function. Place in header file.
+- This way the expansion during the preprocessing is done without much issues; if the `inline` function undergoes expansion.
+
+(b) `void putValues(int *arr, int size);`
+
+- It is a function prototype. Shall go in header file.
+- Needs to go in header files because other files need the blueprint of the function.
+
+## ch06_exrc_6p44
+
+Exercise 6.44: Rewrite the `isShorter` function from § 6.2.2 (p. 211) to be `inline`.
+
+Given code:
+
+```cpp
+// compare the length of two strings
+bool isShorter(const string &s1, const string &s2)
+{
+    return s1.size() < s2.size();
+}
+```
+
+Modified: 
+
+```cpp
+// compare the length of two strings
+inline bool isShorter(const string &s1, const string &s2)
+{
+    return s1.size() < s2.size();
+}
+```
+
+## ch06_exrc_6p45
+
+Exercise 6.45: Review the programs you've written for the earlier exercises and decide whether they should be defined as `inline`. If so, do so. If not, explain why they should not be `inline`.
+
+- **Skipping this task to save time**
+- Any function that is smaller in size (say not more than 5 lines); shall be an `inline`.
+- Any function that is smaller in size and is called large number of times; shall be an `inline`.
+- Any function that is smaller in size and are recursive but only go a smaller depth of recursion; shall be an `inline`.
+
+## ch06_exrc_6p46
+
+Exercise 6.46: Would it be possible to define `isShorter` as a `constexpr`? If so, do so. If not, explain why not.
+
+Given code:
+
+```cpp
+// compare the length of two strings
+bool isShorter(const string &s1, const string &s2)
+{
+    return s1.size() < s2.size();
+}
+```
+
+- No.
+- Size of the passed strings might vary.
+- `std::string::size()` is not a `constexpr` member function.
+
+## ch06_exrc_6p48
+
+Exercise 6.48: Explain what this loop does and whether it is a good use of `assert`:
+
+```cpp
+string s;
+while (cin >> s && s != sought) { } // empty body
+assert(cin);
+```
+
+The loop `while (cin >> s && s != sought) { }` continues to read words from `cin` until either an end-of-file (EOF) or invalid input occurs (making `cin >> s` false), or until the word read (`s`) is equal to `sought`.
+
+The `assert(cin);` statement checks the state of `cin` *after* the loop terminates.
+* If the loop terminated because `s == sought` (meaning `s != sought` became false), then `cin` would still be in a good state, `assert(cin)` would evaluate `assert(true)`, and the program would continue.
+* However, if the loop terminated because `cin >> s` failed (e.g., due to EOF or a non-matching input error), then `cin` would be in a failed state. In a boolean context, a failed `cin` evaluates to `false`. Therefore, `assert(cin)` would evaluate `assert(false)`, which would cause the program to **terminate** (in debug builds).
+
+This `assert` is **not a good use** because `cin` failing is a common and expected scenario for input operations. Assertions are for conditions that indicate a programming bug or an impossible state, not for expected runtime conditions that should be handled gracefully. A more appropriate way to check `cin`'s state would be using an `if` statement or a regular conditional check, allowing the program to respond appropriately (e.g., print an error message, exit cleanly, or retry input) rather than crashing.
+
+## ch06_exrc_6p49
+
+Exercise 6.49: What is a candidate function? What is a viable function?
+
+**Candidate Function:** A function is a **candidate** if its name matches the function being called and it's visible at the point of the call.
+
+**Viable Function:** From the set of candidate functions, a function is **viable** if:
+1.  It has the same number of parameters as the arguments in the call, or it can be called with the given arguments after considering default arguments.
+2.  The type of each argument can be converted to the type of its corresponding parameter.
+
+## ch06_exrc_6p50
+
+Exercise 6.50: Given the declarations for `f` from page 242, list the viable functions, if any for each of the following calls. Indicate which function is the best match, or if the call is illegal whether there is no match or why the call is ambiguous.
+
+(a) f(2.56, 42) (b) f(42) (c) f(42, 0) (d) f(2.56, 3.14)
+
+The given candidates:
+
+```cpp
+void f();
+void f(int);
+void f(int, int);
+void f(double, double = 3.14);
+```
+
+(a) `f(2.56, 42)`:
+
+- Candidates 3 and 4 are viable functions.
+- But the call is **ambiguous**.
+
+ (b) `f(42)`
+ 
+ - Candidates 2 and 4 are viable functions
+ - 2 is the best match.
+ 
+ (c) `f(42, 0)`
+ 
+ - Candidates 3 and 4 are the viable functions.
+ - Candidate 3 is the best option.
+
+(d) `f(2.56, 3.14)`
+
+- Candidates 3 and 4 are the viable functions.
+- Candidate 4 is the best match.
+
+## ch06_exrc_6p51
+
+Exercise 6.51: Write all four versions of `f`. Each function should print a distinguishing message. Check your answers for the previous exercise. If your answers were incorrect, study this section until you understand why your answers were wrong.
+
+[ch06_exrc_6p51](./ch06_exrc_6p51/)
+
+```console
+g++ -Wall -std=c++11 -g -O0 -c main.cpp
+main.cpp: In function ‘int main()':
+main.cpp:8:6: error: call of overloaded ‘f(double, int)' is ambiguous
+    8 |     f(2.56, 42);
+      |     ~^~~~~~~~~~
+In file included from main.cpp:2:
+functionMatch.hpp:3:6: note: candidate: ‘void f(int, int)'
+    3 | void f(int, int);
+      |      ^
+functionMatch.hpp:4:6: note: candidate: ‘void f(double, double)'
+    4 | void f(double, double = 3.14);
+      |      ^
+make: *** [Makefile:32: main.o] Error 1
+```
+
+- Now commenting the fist call `f(2.56, 42);`.
+
+```console
+$ make run
+./a.out
+I am in function: f(int)
+I am in function: f(int, int)
+I am in function: f(double, double = 3.14)
+```
+
+## ch06_exrc_6p52
+
+Exercise 6.52: Given the following declarations, 
+
+```cpp
+void manip(int, int);
+double dobj;
+```
+
+what is the rank (§ 6.6.1, p. 245) of each conversion in the following calls?
+
+(a) `manip('a', 'z');` (b) `manip(55.4, dobj);`
+
+Conversions are ranked as follows:
+1. An exact match. An exact match happens when:
+- The argument and parameter types are identical.
+- The argument is converted from an array or function type to the corresponding pointer type.
+- A top-level `const` is added to or discarded from the argument.
+2. Match through a `const` conversion.
+3. Match through a promotion.
+4. Match through an arithmetic or pointer conversion.
+5. Match through a class-type conversion.
+
+(a) `manip('a', 'z');` 
+
+- The rank is 3 (Match through a promotion). Both the arguments are converted to `int`.
+
+(b) `manip(55.4, dobj);`
+
+- Rank 5. Match through an arithmetic conversion.
+
+## ch06_exrc_6p53
+
+Exercise 6.53: Explain the effect of the second declaration in each one of the following sets of declarations. Indicate which, if any, are illegal.
+
+(a) 
+
+```cpp
+int calc(int&, int&);
+int calc(const int&, const int&);
+```
+
+- Based on the rule, "`const`ness on pointers or references do contribute in function overloading", the given two declarations are different.
+- When the `const` arguments are used, the second function is called.
+- When the non-`const` arguments are used, both the functions are viable but due to exact matching, first function is called.
+
+(b) 
+
+```cpp
+int calc(char*, char*);
+int calc(const char*, const char*);
+```
+
+- Based on the rule, "`const`ness on pointers or references do contribute in function overloading", the given two declarations are different.
+- When the `const` arguments are used, the second function is called.
+- When the non-`const` arguments are used, both the functions are viable but due to exact matching, first function is called.
+
+
+(c) 
+
+```cpp
+int calc(char*, char*);
+int calc(char* const, char* const);
+```
+
+- Since, top level `const` cannot contribute for function overloading, these two declarations are essentially the same.
+
+## ch06_exrc_6p54
+
+Exercise 6.54: Write a declaration for a function that takes two `int` parameters and returns an `int`, and declare a `vector` whose elements have this function pointer type.
+
+```cpp
+int func(int, int);
+typedef decltype(func) *fp;
+
+vector<fp> vfp;
+```
+
+OR 
+
+```cpp
+int func(int, int);
+using fp = int(*)(int, int); // fp is a pointer to a function that takes two ints and returns an int
+
+std::vector<fp> vfp;
+```
+
+## ch06_exrc_6p55
+
+Exercise 6.55: Write four functions that add, subtract, multiply, and divide two `int` values. Store pointers to these functions in your vector from the previous exercise.
+
+**NOTE: Check solution given for ch06_exrc_6p56**
