@@ -534,3 +534,381 @@ Exercise 7.46: Which, if any, of the following statements are untrue? Why?
     * It *does* call the default constructors of class-type members (if they have one) and uses in-class initializers.
     * The rule for zero-initialization (setting to zero) applies only in specific contexts (static/global variables, arrays value-initialized, explicit value initialization with `{}`). Default initialization of local built-in variables does not zero them.
 
+## ch07_exrc_7p47
+
+Exercise 7.47: Explain whether the `Sales_data` constructor that takes a string should be explicit. What are the benefits of making the constructor explicit? What are the drawbacks?
+
+Yes, the `Sales_data` constructor `Sales_data(std::string s)` **should be explicit**.
+
+**Benefits of `explicit`:**
+
+* **Prevents Implicit Conversions:** Stops the compiler from automatically converting a `std::string` into a `Sales_data` object in contexts like function calls or assignments where such a conversion might be unintentional or misleading.
+* **Avoids Subtle Bugs:** Reduces the chance of subtle logical errors where a string is accidentally interpreted as a `Sales_data` object.
+* **Clarity:** Forces users to be explicit about their intent to create a `Sales_data` object from a string (e.g., `Sales_data item("0-201-78345-X");` or `Sales_data item = Sales_data("0-201-78345-X");`).
+
+**Drawbacks of `explicit`:**
+
+* **Less Convenient:** Requires explicit casting or direct construction syntax (`Sales_data item("isbn");` or `static_cast<Sales_data>("isbn")`) even when the conversion might be desired.
+* **No Implicit Initializations:** Disallows direct initialization using an `=` sign (e.g., `Sales_data item = "0-201-78345-X";` becomes illegal).
+
+## ch07_exrc_7p48
+
+Exercise 7.48: Assuming the `Sales_data` constructors are not `explicit`, what operations happen during the following definitions
+
+```cpp
+string null_isbn("9-999-99999-9");
+Sales_data item1(null_isbn);
+Sales_data item2("9-999-99999-9");
+```
+
+What happens if the `Sales_data` constructors are explicit?
+
+**If `Sales_data` constructors are NOT `explicit`:**
+
+* `Sales_data item1(null_isbn);`: **Direct initialization.** Calls `Sales_data(const std::string&)` constructor, directly using `null_isbn`.
+* `Sales_data item2("9-999-99999-9");`: **Direct initialization.** Calls `Sales_data(const std::string&)` constructor, using the string literal "9-999-99999-9".
+
+**If `Sales_data` constructors ARE `explicit`:**
+
+* `Sales_data item1(null_isbn);`: **Still Legal (Direct Initialization).** Explicit constructors can always be used for direct initialization.
+* `Sales_data item2("9-999-99999-9");`: **Still Legal (Direct Initialization).** Same as above, direct initialization is allowed.
+
+The question likely intended to include an example like `Sales_data item3 = "9-999-99999-9";`. In that case:
+
+* **If NOT `explicit`:** Legal. Uses **copy initialization**, implicitly converting "9-999-99999-9" to a `Sales_data` object using `Sales_data(const std::string&)` constructor.
+* **If `explicit`:** **Illegal.** `explicit` prevents implicit conversions required by copy initialization.
+
+## ch07_exrc_7p49
+
+Exercise 7.49: For each of the three following declarations of combine, explain what happens if we call `i.combine(s)`, where `i` is a `Sales_data` and `s` is a `string`:
+
+(a) `Sales_data &combine(Sales_data);`
+(b) `Sales_data &combine(Sales_data&);`
+(c) `Sales_data &combine(const Sales_data&) const;`
+
+Assuming `Sales_data` constructors are **not `explicit`** (as is typical for this type of problem unless stated otherwise, allowing implicit conversions from `string` to `Sales_data`).
+
+**`Sales_data i;` and `std::string s;`**
+
+**(a) `Sales_data &combine(Sales_data);`**
+* **What happens:**
+    1.  The `std::string s` is **implicitly converted** to a temporary `Sales_data` object using the `Sales_data(const std::string&)` constructor.
+    2.  This temporary `Sales_data` object is then **copied** (due to pass-by-value) into the `combine` function's parameter.
+    3.  The `combine` function executes.
+    4.  The return type is `Sales_data&`, which implies returning a reference to `*this`. This is fine.
+* **Result:** The call is legal. The original `Sales_data i` is modified, but there's an unnecessary temporary object creation and copy due to pass-by-value.
+
+**(b) `Sales_data &combine(Sales_data&);`**
+* **What happens:**
+    1.  The `combine` function expects a **non-const lvalue reference** (`Sales_data&`).
+    2.  The `std::string s` can be implicitly converted to a `Sales_data` temporary.
+    3.  **Problem:** A non-const lvalue reference **cannot bind to a temporary object**.
+* **Result:** **Illegal.** Compilation error.
+
+**(c) `Sales_data &combine(const Sales_data&) const;`**
+* **What happens:**
+    1.  The `std::string s` is **implicitly converted** to a temporary `Sales_data` object using the `Sales_data(const std::string&)` constructor.
+    2.  The `combine` function expects a **const lvalue reference** (`const Sales_data&`). A `const` lvalue reference **can bind to a temporary object**.
+    3.  The `combine` function is declared `const` (`const;` at the end), meaning it promises not to modify `*this`. Its return type is `Sales_data&`, which would allow modification of the calling object.
+* **Result:** **Illegal.** While the implicit conversion and binding to a temporary are fine, the `const` qualifier on the member function (`const` after parameters) indicates that `combine` cannot modify the `Sales_data` object it's called on (`i` in `i.combine(s)`). However, `combine`'s signature returns `Sales_data&`, which *implies* it might modify `i`. This is a contradiction, as you cannot return a non-const reference to a `const` object (`*this`). The compiler will typically issue an error about returning a non-const reference from a const member function.
+
+## ch07_exrc_7p50
+
+Exercise 7.50: Determine whether any of your `Person` class constructors should be explicit.
+
+Let's consider the `Person` class and its constructors:
+
+```cpp
+class Person {
+public:
+    // Person() = default; // (a) Default constructor
+    // Person(const string &name) : name(name) {} // (b) Takes name (implicitly convertible from string)
+    // Person(const string &name, const string &address) : name(name), address(address) {} // (c) Takes name, address
+    // Person(istream &is) { read(is, *this); } // (d) Takes istream&
+    // ...
+private:
+    std::string name = "";
+    std::string address = "";
+    // ...
+};
+```
+
+**Which constructors should be `explicit`?**
+
+1.  **`Person(const string &name)` (Constructor (b)):**
+    * **Should be `explicit`.**
+    * **Reason:** It's unlikely that an implicit conversion from a `std::string` to a `Person` object is ever desired. For instance, if you had a function `void processPerson(Person p);`, you wouldn't want to accidentally call `processPerson("John Doe");` and have it silently create a `Person` object. `explicit` forces users to write `processPerson(Person("John Doe"));` making their intent clear.
+    * **Benefit:** Prevents unintended conversions and potential bugs.
+    * **Drawback:** Requires explicit construction syntax.
+
+2.  **`Person(istream &is)` (Constructor (d)):**
+    * **Should be `explicit`.**
+    * **Reason:** Implicit conversion from an `istream` to a `Person` object is almost never what you'd want. An `istream` typically represents a source of data, not a direct value that "is" a `Person`. If this constructor were not `explicit`, something like `void func(Person p);` and then calling `func(std::cin);` would try to create a `Person` from `std::cin`, which is highly improbable intended behavior.
+    * **Benefit:** Prevents unexpected and probably incorrect implicit conversions.
+    * **Drawback:** Requires explicit construction syntax (e.g., `Person p(std::cin);`).
+
+**Constructors that generally should NOT be `explicit` (or cannot be):**
+
+* **`Person() = default;` (Constructor (a)):** Default constructors cannot be `explicit`. An `explicit` default constructor makes no sense as it defeats the purpose of being "default."
+* **`Person(const string &name, const string &address)` (Constructor (c)):** This constructor takes two arguments. Constructors with more than one required argument are not considered for implicit conversions (only single-argument constructors are), so `explicit` is unnecessary and would have no effect here.
+
+**In summary:** The single-parameter constructors, `Person(const std::string&)` and `Person(std::istream&)`, are prime candidates for being `explicit` to prevent undesired implicit type conversions.
+
+## ch07_exrc_7p51
+
+Exercise 7.51: Why do you think `vector` defines its single-argument constructor as `explicit`, but `string` does not?
+
+The choice to make a single-argument constructor `explicit` boils down to whether the conversion it performs is considered **natural and intuitive (implicit)** or **potentially surprising and error-prone (explicit)**.
+
+**`std::vector`'s single-argument constructor is `explicit`:**
+
+* `std::vector<T>::vector(size_type count);` (e.g., `std::vector<int> v(10);`)
+* **Reason for `explicit`:** An `int` (representing a count) is fundamentally **not** the same "thing" as a `std::vector` (a dynamic array). If this constructor were not explicit, you could write:
+    * `void func(std::vector<int> v);`
+    * `func(10);` // This would implicitly create a vector of 10 zeros.
+* This implicit conversion is often **undesirable and non-obvious**. An integer count doesn't "is-a" vector. Making it `explicit` forces you to write `func(std::vector<int>(10));`, which clearly states your intent to create a vector from that count. This prevents accidental conversions that could lead to bugs.
+
+**`std::string`'s single-argument constructor is NOT `explicit`:**
+
+* `std::string::string(const char* s);` (e.g., `std::string str = "hello";`)
+* **Reason for NOT `explicit`:** A C-style string literal (`const char*`) is widely considered to be **conceptually equivalent** to a `std::string`. The conversion from `const char*` to `std::string` is so common and natural that the convenience of implicit conversion outweighs the risk of accidental use.
+    * `void func(std::string s);`
+    * `func("world");` // This is very idiomatic C++ and generally desired.
+* Making this `explicit` would make `std::string` much less convenient to use with string literals and C-style strings, which are a cornerstone of C++ text handling.
+
+**In essence:**
+
+* `vector<T>(count)`: A count is **not** a vector. The conversion is not natural. -> **`explicit`**
+* `string(const char*)`: A C-style string **is conceptually** a string. The conversion is very natural and commonly desired. -> **Not `explicit`**
+
+## ch07_exrc_7p52
+
+Exercise 7.52: Using our first version of `Sales_data` from § 2.6.1 (p. 72), explain the following initialization. Identify and fix any problems.
+
+```cpp
+Sales_data item = {"978-0590353403", 25, 15.99};
+```
+
+Our first version of `Sales_data` from § 2.6.1 (p. 72):
+
+```cpp
+struct Sales_data {
+    std::string bookNo;
+    unsigned units_sold = 0;
+    double revenue = 0.0;
+};
+```
+
+- No problems.
+- `bookNo` will have the value `"978-0590353403"`.
+- `units_sold` will have the value `25`.
+- `revenue` will have the value `15.99`.
+
+## ch07_exrc_7p53
+
+Exercise 7.53: Define your own version of `Debug`.
+
+```cpp
+class Debug {
+    public:
+    constexpr Debug(bool b = true): hw(b), io(b), other(b) { }
+    constexpr Debug(bool h, bool i, bool o): hw(h), io(i), other(o) { }
+    
+    constexpr bool any() { return hw || io || other; }
+    void set_io(bool b) { io = b; }
+    void set_hw(bool b) { hw = b; }
+    void set_other(bool b) { hw = b; }
+    
+    private:
+    bool hw; // hardware errors other than IO errors
+    bool io; // IO errors
+    bool other; // other errors
+};
+```
+
+## ch07_exrc_7p54
+
+Exercise 7.54: Should the members of `Debug` that begin with `set_` be declared as `constexpr`? If not, why not?
+
+No, the members of `Debug` that begin with `set_` (**`set_io`, `set_hw`, `set_other`**) **should NOT be declared as `constexpr`**.
+
+**Reason:**
+
+A `constexpr` function implies that it can be evaluated at compile time. However, a crucial rule for `constexpr` functions is that they **cannot modify the state of an object** unless that object is `mutable` and the modification is part of a `constexpr` context that ensures the object is destroyed before end of compilation (which is rare for member setters). More generally, a `constexpr` member function must be `const` and not modify its `this` object.
+
+The `set_` functions explicitly **modify data members** (`io`, `hw`, `other`). Therefore, they are inherently non-`const` operations and cannot be `constexpr`. They change the object's state, which is generally disallowed for `constexpr` member functions (which are implicitly `const` unless they are constructors).
+
+## ch07_exrc_7p55
+
+Exercise 7.55: Is the `Data` class from § 7.5.5 (p. 298) a literal class? If not, why not? If so, explain why it is literal.
+
+```cpp
+struct Data {
+    int ival;
+    string s;
+};
+```
+
+No, the `Data` class from § 7.5.5 (p. 298) is **NOT a literal class**.
+
+**Reason:**
+
+For a class to be a literal type, **all of its data members must also be literal types**.
+
+In the `Data` struct:
+
+* `int ival;` is a literal type (it's a built-in type).
+* `std::string s;` is **not a literal type**. `std::string` has a user-defined destructor, copy constructor, and assignment operator, which disqualifies it from being a literal type.
+
+Because `std::string` is not a literal type, `Data` cannot be a literal type, even though `int` is.
+
+## ch07_exrc_7p56
+
+Exercise 7.56: What is a `static` class member? What are the advantages of `static` members? How do they differ from ordinary members?
+
+**What is a `static` class member?**
+
+A `static` class member (data member or member function) is a member that **belongs to the class itself**, rather than to individual objects (instances) of the class. There is only **one copy** of a `static` data member, shared by all objects of that class. `static` member functions can be called without an object.
+
+**Advantages of `static` members:**
+
+* **Shared Data:** Provides a way for all objects of a class to share the same data, ensuring consistency (e.g., a counter for created objects).
+* **Utility Functions:** Enables defining utility functions that are logically associated with a class but don't operate on specific object instances (e.g., a factory method, a comparison function).
+* **Namespace Scoping:** They provide better organization than global functions/variables by being scoped within the class's name.
+* **Access without Object:** `static` members can be accessed directly using the class name (`ClassName::staticMember`) without needing an object instance.
+
+**How do they differ from ordinary members?**
+
+* **Ownership:**
+    * **Ordinary:** Belongs to each individual object. Each object has its own copy of the data.
+    * **Static:** Belongs to the class itself. There is only one copy, shared by all objects.
+* **Storage:**
+    * **Ordinary Data:** Stored as part of each object's memory footprint.
+    * **Static Data:** Stored separately, outside of any object.
+* **Access:**
+    * **Ordinary:** Accessed via an object instance (`object.member`) and implicitly via `this` pointer in non-static member functions.
+    * **Static:** Accessed via the class name (`ClassName::staticMember`) or, less commonly, via an object instance (`object.staticMember`). `static` member functions do *not* have a `this` pointer and can only access other `static` members or global data.
+* **Initialization (Data Members):**
+    * **Ordinary Data:** Initialized when an object is constructed.
+    * **Static Data:** Must be defined and often initialized outside the class definition, typically in a single `.cpp` file.
+
+## ch07_exrc_7p57
+
+Exercise 7.57: Write your own version of the `Account` class.
+
+```cpp
+class Account {
+    public:
+    void calculate() { amount += amount * interestRate; }
+    static double rate() { return interestRate; }
+    static void rate(double);
+
+    private:
+    std::string owner;
+    double amount;
+    static double interestRate;
+    static double initRate();
+};
+
+void Account::rate(double newRate) {
+    interestRate = newRate;
+}
+
+// define and initialize a static class member
+double Account::interestRate = initRate();
+
+double Account::initRate() {
+    return double(8.5);
+}
+```
+
+## ch07_exrc_7p58
+
+Exercise 7.58: Which, if any, of the following `static` data member declarations and definitions are errors? Explain why.
+
+```cpp
+// example.h
+class Example {
+    public:
+    static double rate = 6.5;
+    static const int vecSize = 20;
+    static vector<double> vec(vecSize);
+};
+
+// example.C
+#include "example.h"
+double Example::rate;
+vector<double> Example::vec;
+```
+
+Let's analyze each part of the `static` data member declarations and definitions:
+
+**Inside `example.h` (Declarations):**
+
+1.  **`static double rate = 6.5;`**
+    * **Error:** Yes, this is an error.
+    * **Explanation:** Non-`const` `static` data members **cannot be initialized inside the class definition** (in the header file). Their definition and initialization must occur outside the class, typically in a single `.cpp` file. Only `static const` integral types (and `static constexpr` in C++11 and later for any literal type) can be initialized directly in the class definition.
+
+2.  **`static const int vecSize = 20;`**
+    * **Error:** No, this is **legal**.
+    * **Explanation:** `static const int` members (which are integral types) *can* be initialized directly inside the class definition (in the header). This is a special rule for such members, allowing them to be used as compile-time constants (e.g., for array sizes).
+
+3.  **`static vector<double> vec(vecSize);`**
+    * **Error:** Yes, this is an error.
+    * **Explanation:**
+        * Like `rate`, `static` members that are **not integral constants** (or `constexpr` literal types) cannot be initialized inside the class definition. `std::vector` is a class type, not an integral type.
+        * Even if it were an integral type, `vec(vecSize)` uses **parenthesized initialization**, which is generally not allowed for in-class initializers for `static` members (only brace or equals initializer are).
+        * Furthermore, even if the syntax were allowed, it still violates the rule that non-integral-constant `static` members must be *defined* (and possibly initialized) outside the class.
+
+**Inside `example.C` (Definitions):**
+
+1.  **`double Example::rate;`**
+    * **Error:** No, this is **legal (and necessary)**.
+    * **Explanation:** This provides the definition for the `static double rate` declared in the header. If it needed an initial value, it would be `double Example::rate = 6.5;` here. Since it was given `6.5` in the declaration, this definition is just providing the storage. If you had removed the `= 6.5` from the header, then `double Example::rate = 6.5;` would be needed here. Given the error in the header, you would indeed need `double Example::rate = 6.5;` here.
+
+2.  **`vector<double> Example::vec;`**
+    * **Error:** No, this is **legal (and necessary)**.
+    * **Explanation:** This provides the definition for the `static vector<double> vec` declared in the header. You would typically initialize it here as well, e.g., `std::vector<double> Example::vec(vecSize);` (note `std::vector` qualification and using `vecSize` which is now a valid static const member).
+
+---
+
+**Corrected `example.h` and `example.C`:**
+
+**`example.h`:**
+
+```cpp
+// example.h
+#ifndef EXAMPLE_H
+#define EXAMPLE_H
+
+#include <vector> // Need to include <vector> for std::vector
+// using std::vector; // Optional, can use std::vector explicitly
+
+class Example {
+public:
+    // static double rate = 6.5; // ILLEGAL: Remove initialization here
+    static double rate; // Just the declaration
+
+    static const int vecSize = 20; // LEGAL: static const integral type can be initialized in-class
+
+    // static vector<double> vec(vecSize); // ILLEGAL: Remove initialization here, and use std::vector
+    static std::vector<double> vec; // Just the declaration (must use std::vector)
+};
+
+#endif // EXAMPLE_H
+```
+
+**`example.C`:**
+
+```cpp
+// example.C
+#include "example.h"
+#include <vector> // Best practice to include headers needed for definitions here too
+
+// Definition and initialization for static double rate
+double Example::rate = 6.5; // Initialize here
+
+// Definition and initialization for static vector<double> vec
+// Note: vecSize is accessible here as it's a static const member.
+std::vector<double> Example::vec(Example::vecSize); // Initialize here
+```
