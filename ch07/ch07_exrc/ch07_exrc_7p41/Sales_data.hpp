@@ -8,6 +8,7 @@
 #include <cmath>  // for std::nan - not a number
 
 using std::string;
+using std::cout;
 using std::istream;
 using std::ostream;
 using std::exception;
@@ -25,10 +26,17 @@ class Sales_data {
 
     public:
     // START: constructors
-    Sales_data() = default;
-    Sales_data(const string& s): bookNo(s) {}
-    Sales_data(const string&s, unsigned int n, double p): bookNo(s), units_sold(n), revenue(n * p){}
-    Sales_data(istream &is) {
+    Sales_data(const string&s, unsigned int n, double p): bookNo(s), units_sold(n), revenue(n * p){
+        cout << "I am a delected-to constructor with 3 parameters\n";
+    }
+    Sales_data(): Sales_data("", 0, 0) {
+        cout << "I am a delecting constructor with 0 parameters (default constrcutor)\n";
+    }
+    Sales_data(const string& s): Sales_data(s, 0, 0) {
+        cout << "I am a delecting constructor with 1 parameter (isbn).\nWill delegate the only available delegating-to constructor.\n";
+    }
+    Sales_data(istream &is): Sales_data() {
+        cout << "I am a delecting constructor with 1 parameter (reference to istream).\nWill delegate the only available delegating-to constructor.\n";
         read(is, *this);
     }
     // END: constructors
