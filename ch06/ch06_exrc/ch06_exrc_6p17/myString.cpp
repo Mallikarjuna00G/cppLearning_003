@@ -1,5 +1,7 @@
 #include "myString.h"
 
+using std::string;
+
 bool hasCapLetters(const string &s) {
     bool ret = false;
 

@@ -9,6 +9,8 @@ using std::vector;
 using std::runtime_error;
 using std::exception;
 
+using fp = int(*)(int, int); // fp is a pointer to a function that takes two ints and returns an int
+
 int main() {
     
     try {

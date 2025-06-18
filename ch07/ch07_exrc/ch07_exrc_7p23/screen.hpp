@@ -3,16 +3,14 @@
 
 #include <string>
 
-using std::string;
-
 class Screen {
     // START: friend
     
     // END: friend
 
     public:
-    typedef string::size_type pos;
-    // using pos = string::size_type;
+    typedef std::string::size_type pos;
+    // using pos = std::string::size_type;
 
     // START: constructors
     Screen() = default;
@@ -27,7 +25,7 @@ class Screen {
     private:
     pos cursor = 0;
     pos height = 0, width = 0;
-    string contents;
+    std::string contents;
 };
 
 inline Screen& Screen::move(pos r, pos c) {

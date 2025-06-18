@@ -1,5 +1,7 @@
 #include "Sales_data.hpp"
 
+using std::string;
+
 Sales_data& Sales_data::combine(const Sales_data &sd) {
     this->units_sold += sd.units_sold;
     this->revenue += sd.revenue;

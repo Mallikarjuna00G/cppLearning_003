@@ -3,8 +3,6 @@
 
 #include <string>
 
-using std::string;
-
 struct Person {
     std::string name = "";
     std::string address = "";

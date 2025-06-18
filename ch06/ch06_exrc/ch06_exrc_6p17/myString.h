@@ -3,9 +3,7 @@
 
 #include <string>
 
-using std::string;
-
-bool hasCapLetters(const string &s);
-void fullLower(string &s);
+bool hasCapLetters(const std::string &s);
+void fullLower(std::string &s);
 
 #endif

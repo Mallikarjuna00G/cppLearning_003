@@ -1,10 +1,12 @@
 #include <iostream>
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 #include "screen.hpp"
 #include "winMgr.hpp"
 
+using std::string;
 using std::cout;
 using std::cin;
 using std::runtime_error;

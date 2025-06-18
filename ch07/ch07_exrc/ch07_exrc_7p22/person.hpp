@@ -4,36 +4,32 @@
 #include <string>
 #include <iostream>
 
-using std::string;
-using std::istream;
-using std::ostream;
-
 struct Person;  // forward declaration
-istream& read(istream& is, Person &p);
+std::istream& read(std::istream& is, Person &p);
 
 class Person {
     // START: friend
-    friend istream& read(istream& is, Person &p);
+    friend std::istream& read(std::istream& is, Person &p);
     // END: friend
 
     public:
     // START: constructors
     Person() = default;
-    Person(const string &name): name(name) {}
-    Person(const string &name, const string &address): name(name), address(address) {}
-    Person(istream &is) {
+    Person(const std::string &name): name(name) {}
+    Person(const std::string &name, const std::string &address): name(name), address(address) {}
+    Person(std::istream &is) {
         read(is, *this);
     }
     // END: constructors
 
-    inline string getName() const {return name;}
-    inline string getAddress() const {return address;}
+    inline std::string getName() const {return name;}
+    inline std::string getAddress() const {return address;}
     
     private:
     std::string name = "";
     std::string address = "";
 };
 
-ostream& print(ostream& os, const Person &p);
+std::ostream& print(std::ostream& os, const Person &p);
 
 #endif

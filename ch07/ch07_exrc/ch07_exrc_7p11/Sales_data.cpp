@@ -1,5 +1,11 @@
 #include "Sales_data.hpp"
 
+using std::string;
+using std::istream;
+using std::ostream;
+using std::exception;
+using std::runtime_error;
+
 Sales_data& Sales_data::combine(const Sales_data &sd) {
     this->units_sold += sd.units_sold;
     this->revenue += sd.revenue;

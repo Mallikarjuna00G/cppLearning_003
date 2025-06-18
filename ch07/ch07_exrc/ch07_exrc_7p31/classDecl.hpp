@@ -4,10 +4,6 @@
 #include <string>
 #include <iostream>
 
-using std::string;
-using std::istream;
-using std::ostream;
-
 class Y;  // forward declaration
 
 class X {

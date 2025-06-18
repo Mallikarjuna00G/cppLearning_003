@@ -1,5 +1,8 @@
 #include "fpCalc.hpp"
 
+using std::runtime_error;
+using std::exception;
+
 int add(int a, int b) {
     return a + b;
 }

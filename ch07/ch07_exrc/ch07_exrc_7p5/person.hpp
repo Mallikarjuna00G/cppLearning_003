@@ -3,14 +3,12 @@
 
 #include <string>
 
-using std::string;
-
 struct Person {
     std::string name = "";
     std::string address = "";
 
-    string getName() const {return name;}
-    string getAddress() const {return address;}
+    std::string getName() const {return name;}
+    std::string getAddress() const {return address;}
 };
 
 #endif

@@ -1,9 +1,11 @@
 #include <iostream>
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 #include "person.hpp"
 
+using std::string;
 using std::cout;
 using std::cin;
 using std::runtime_error;

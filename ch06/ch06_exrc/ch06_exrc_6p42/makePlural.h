@@ -2,9 +2,8 @@
 #define MAKE_PLURAL_H
 
 #include <string>
+#include <cstddef>
 
-using std::string;
-
-string make_plural(size_t ctr, const string &word, const string &ending = "s");
+std::string make_plural(std::size_t ctr, const std::string &word, const std::string &ending = "s");
 
 #endif

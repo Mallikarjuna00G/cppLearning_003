@@ -3,11 +3,9 @@
 
 #include <iostream>
 #include <vector>
+#include <cstddef>
 
-using std::vector;
-using std::cout;
-
-void printVec(vector<int> &vec);
-void recVec(vector<int> &vec, size_t index);
+void printVec(std::vector<int> &vec);
+void recVec(std::vector<int> &vec, std::size_t index);
 
 #endif

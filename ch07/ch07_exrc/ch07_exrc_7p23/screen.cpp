@@ -1,5 +1,7 @@
 #include "screen.hpp"
 
+using std::string;
+
 /**
  * Declared as inline in the class
  * Return character at given position(row, column)

@@ -4,10 +4,6 @@
 #include <string>
 #include <iostream>
 
-using std::string;
-using std::istream;
-using std::ostream;
-
 class Window_mgr;
 
 class Screen {
@@ -17,8 +13,8 @@ class Screen {
     // END: friend
 
     public:
-    typedef string::size_type pos;
-    // using pos = string::size_type;
+    typedef std::string::size_type pos;
+    // using pos = std::string::size_type;
 
     // START: constructors
     Screen() = default;
@@ -32,12 +28,12 @@ class Screen {
     Screen &set(char c);
     Screen &set(pos row, pos col, char ch);
 
-    Screen &display(ostream &os) {
+    Screen &display(std::ostream &os) {
         do_display(os);
         return *this;
     }
 
-    const Screen &display(ostream &os) const {
+    const Screen &display(std::ostream &os) const {
         do_display(os);
         return *this;
     }
@@ -46,9 +42,9 @@ class Screen {
     private:
     pos cursor = 0;
     pos height = 0, width = 0;
-    string contents;
+    std::string contents;
 
-    void do_display(ostream &os) const {
+    void do_display(std::ostream &os) const {
         os << contents;
     }
 };

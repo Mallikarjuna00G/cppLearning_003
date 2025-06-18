@@ -7,33 +7,27 @@
 #include <stdexcept>
 #include <cmath>  // for std::nan - not a number
 
-using std::string;
-using std::istream;
-using std::ostream;
-using std::exception;
-using std::runtime_error;
-
 struct Sales_data;  // forward declaration
-istream &read(istream &is, Sales_data &item);
+std::istream &read(std::istream &is, Sales_data &item);
 
 class Sales_data {
     // START: friends
-    friend istream &read(istream &is, Sales_data &item);
-    friend ostream &print(ostream &os, const Sales_data &item);
+    friend std::istream &read(std::istream &is, Sales_data &item);
+    friend std::ostream &print(std::ostream &os, const Sales_data &item);
     friend Sales_data add(const Sales_data &lhs, const Sales_data &rhs);
     // END: friends
 
     public:
     // START: constructors
     Sales_data() = default;
-    Sales_data(const string& s): bookNo(s) {}
-    Sales_data(const string&s, unsigned int n, double p): bookNo(s), units_sold(n), revenue(n * p){}
-    Sales_data(istream &is) {
+    Sales_data(const std::string& s): bookNo(s) {}
+    Sales_data(const std::string& s, unsigned int n, double p): bookNo(s), units_sold(n), revenue(n * p){}
+    Sales_data(std::istream &is) {
         read(is, *this);
     }
     // END: constructors
 
-    inline string isbn() const {return this->bookNo;};
+    inline std::string isbn() const {return this->bookNo;};
     Sales_data& combine(const Sales_data &sd);
 
     
@@ -42,12 +36,12 @@ class Sales_data {
     }
 
     private:
-    string bookNo = "";
+    std::string bookNo = "";
     unsigned int units_sold = 0;
     double revenue = 0.0;
 };
 
-ostream &print(ostream &os, const Sales_data &item);
+std::ostream &print(std::ostream &os, const Sales_data &item);
 Sales_data add(const Sales_data &lhs, const Sales_data &rhs);
 
 #endif

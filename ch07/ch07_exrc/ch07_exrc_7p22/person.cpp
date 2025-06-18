@@ -1,5 +1,9 @@
 #include "person.hpp"
 
+using std::string;
+using std::istream;
+using std::ostream;
+
 istream& read(istream& is, Person &p) {
     getline(is, p.name);
     getline(is, p.address);
