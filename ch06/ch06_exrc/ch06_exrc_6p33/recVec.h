@@ -6,6 +6,6 @@
 #include <cstddef>
 
 void printVec(std::vector<int> &vec);
-void recVec(std::vector<int> &vec, std::size_t index);
+void recVec(std::vector<int> &vec, std::vector<int>::size_type index);
 
 #endif

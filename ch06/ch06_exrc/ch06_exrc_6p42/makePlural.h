@@ -4,6 +4,6 @@
 #include <string>
 #include <cstddef>
 
-std::string make_plural(std::size_t ctr, const std::string &word, const std::string &ending = "s");
+std::string make_plural(std::string::size_type ctr, const std::string &word, const std::string &ending = "s");
 
 #endif

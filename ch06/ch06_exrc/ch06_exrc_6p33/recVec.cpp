@@ -2,7 +2,6 @@
 
 using std::vector;
 using std::cout;
-using std::size_t;
 
 void printVec(vector<int> &vec) {
     if (vec.empty()) {
@@ -12,7 +11,7 @@ void printVec(vector<int> &vec) {
     recVec(vec, 0);
 }
 
-void recVec(vector<int> &vec, size_t index) {
+void recVec(vector<int> &vec, std::vector<int>::size_type index) {
     if (index == vec.size()) {
         cout << "\n";
         return;
