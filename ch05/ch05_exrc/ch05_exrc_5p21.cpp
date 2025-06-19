@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
+#include <cctype>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
+using std::islower;
 
 
 int main() {
@@ -12,7 +14,7 @@ int main() {
     bool repeated = false;
     if (cin >> str1) {
         while (cin >> str2) {
-            if (!(str2[0] >= 'A' && str2[0] <= 'Z')) {
+            if (islower(str2[0])) {
                 continue;
             }
             if (str1 == str2) {
