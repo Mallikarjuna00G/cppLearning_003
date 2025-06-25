@@ -23,3 +23,7 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 [ch06](./ch06/): Functions
 
 [ch07](./ch07/): Classes
+
+## Part 2: The C++ Library
+
+[ch08](./ch08/): The IO Library
