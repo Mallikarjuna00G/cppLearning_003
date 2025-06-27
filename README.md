@@ -27,3 +27,5 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 ## Part 2: The C++ Library
 
 [ch08](./ch08/): The IO Library
+
+[ch09](./ch09/): Sequential Containers

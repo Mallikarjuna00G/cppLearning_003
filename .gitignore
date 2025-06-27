@@ -3,3 +3,6 @@ a.out
 temp.cpp
 ifile.txt
 ofile.txt
+.vscode
+doc
+DoxyfileLocal
