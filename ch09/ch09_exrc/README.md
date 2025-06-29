@@ -358,3 +358,104 @@ If you use `if (c1 < c2)` with standard C++ containers:
     * More generally, the element types must have a defined `operator<` (or a custom comparison predicate, in more advanced scenarios) for the container's `operator<` to work. If you had `std::vector<MyCustomClass>` and `MyCustomClass` didn't define `operator<`, then `v1 < v2` would fail even if `v1` and `v2` were both `std::vector<MyCustomClass>`.
 
 So, for `if (c1 < c2)` to compile and be valid in the standard library context, `c1` and `c2` must be of the **exact same container type**, and the **elements they store must be comparable using `operator<`**.
+
+---
+
+## ch09_exrc_9p21
+
+Exercise 9.21: Explain how the loop from page 345 that used the return from `insert` to add elements to a `list` would work if we inserted into a `vector` instead.
+
+**Code from page 345:**
+
+```cpp
+list<string> lst;
+auto iter = lst.begin();
+while (cin >> word)
+  iter = lst.insert(iter, word); // same as calling push_front
+```
+
+The code fragment would work identically in terms of its **functional outcome** (reading words from input and effectively prepending them to the container) if we just change the object type from `std::list` to `std::vector`.
+
+```cpp
+vector<string> vec;
+auto iter = vec.begin(); // Initially, iter points to vec.begin() (which is also vec.end() if empty)
+string word;
+while (cin >> word)
+  iter = vec.insert(iter, word); // This line is the key
+```
+
+Here's why it works, and what the important underlying differences are:
+
+### Why it Works (Functional Correctness)
+
+Both `std::list::insert` and `std::vector::insert` have an overload that takes a position iterator and a value, and importantly, **both return an iterator to the newly inserted element.**
+
+  * **Initial state:** `iter` starts pointing to `vec.begin()` (which is also `vec.end()` if `vec` is empty).
+  * **First iteration:** `vec.insert(iter, word)` inserts `word` at the beginning. The `insert` function then returns a valid iterator to this newly inserted `word`. This returned iterator is immediately assigned back to `iter`. So, `iter` now points to the first element (which is the `word` just inserted).
+  * **Subsequent iterations:** In each subsequent loop, `iter` will still be pointing to the "current beginning" (the element that was most recently inserted, which is now the first element). `vec.insert(iter, word)` again inserts the new `word` *before* the element that `iter` points to, and `iter` is updated to point to this *new* first element.
+
+This repeated insertion at `iter` (which is always updated to point to the new first element) effectively simulates `push_front()` behavior for both `std::list` and `std::vector`.
+
+### Key Differences (Underlying Mechanics and Efficiency)
+
+While functionally correct, the underlying performance and behavior of `insert` are vastly different:
+
+1.  **Iterator Invalidation:**
+
+      * **`std::list::insert`**: Does **not** invalidate any iterators (except the `end()` iterator if a new element becomes the last). Insertion is done by modifying pointers.
+      * **`std::vector::insert`**: This is the crucial difference. When you insert an element into a `vector` anywhere other than the very end, all iterators from the insertion point to the end of the vector (including the one passed as `iter` if it pointed to an element that moved) are **invalidated**. If the `vector` needs to reallocate its memory (which happens when its `capacity` is exceeded), *all* iterators and references to elements become invalidated. The reason our code still works is because the `vec.insert(iter, word)` call **returns a *new, valid* iterator** to the newly inserted element, which you immediately reassign to `iter`. This pattern effectively "revalidates" `iter` in each step.
+
+2.  **Performance:**
+
+      * **`std::list::insert` at `begin()`:** This is an `O(1)` operation (constant time). Very efficient.
+      * **`std::vector::insert` at `begin()`:** This is an `O(N)` operation (linear time), where `N` is the number of elements in the vector. Every time you insert at the beginning, all existing elements must be shifted to make room. This makes inserting many elements at the beginning of a vector very inefficient. Additionally, if reallocations occur, the cost is even higher due to copying all elements to a new memory block.
+
+**In summary:** Yes, the loop will work correctly for `std::vector` because `vector::insert` returns a valid iterator. However, this pattern is **highly inefficient** for `std::vector` when inserting at the beginning (or anywhere other than the end), making `std::list` the far more appropriate choice for such an operation. For `vector`, `push_back` is efficient for appending, but there's no efficient `push_front`.
+
+## ch09_exrc_9p22
+
+Exercise 9.22: Assuming `iv` is a vector of `int`s, what is wrong with the following program? How might you correct the problem(s)?
+
+```cpp
+vector<int>::iterator iter = iv.begin(), mid = iv.begin() + iv.size()/2;
+while (iter != mid)
+  if (*iter == some_val)
+    iv.insert(iter, 2 * some_val);
+```
+
+- `iter` and `mid` gets invalidated on first pass condition of `*iter == some_val`, after which behavior of `iter != mid` is undefined.
+
+**Correction:**
+
+```cpp
+vector<int>::iterator iter = iv.begin(), mid = iv.begin() + iv.size()/2;
+while (iter != mid) {
+  if (*iter == some_val) {
+    iter = iv.insert(iter, 2 * some_val);
+    mid = iv.begin() + iv.size() / 2;
+  }
+  iter++;
+}
+```
+
+---
+
+## ch09_exrc_9p23
+
+Exercise 9.23: In the first program in this section on page 346, what would the values of `val`, `val2`, `val3`, and `val4` be if `c.size()` is 1?
+
+**Given code fragment:** 
+
+```cpp
+// check that there are elements before dereferencing an iterator or calling front or back
+if (!c.empty()) {
+  // val and val2 are copies of the value of the first element in c
+  auto val = *c.begin(), val2 = c.front();
+  // val3 and val4 are copies of the of the last element in c
+  auto last = c.end();
+  auto val3 = *(--last); // can’t decrement forward_list iterators
+  auto val4 = c.back(); // not supported by forward_list
+}
+```
+
+- All the objects will have the same value.
