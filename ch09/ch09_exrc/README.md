@@ -459,3 +459,55 @@ if (!c.empty()) {
 ```
 
 - All the objects will have the same value.
+
+---
+
+## ch09_exrc_9p25
+
+Exercise 9.25: In the program on page 349 that erased a range of elements, what happens 
+- if `elem1` and `elem2` are equal? 
+- What if `elem2` or both `elem1` and `elem2` are the off-the-end iterator?
+
+**Given code:**
+
+```cpp
+// delete the range of elements between two iterators
+// returns an iterator to the element just after the last removed element
+elem1 = slist.erase(elem1, elem2); // after the call elem1 == elem2
+```
+
+Remember, `erase(first, last)` removes elements in the range `[first, last)`, meaning it includes `first` but **does not include `last`**. It returns an iterator to the element immediately following the last removed element.
+
+### Case 1: `elem1` and `elem2` are equal
+
+* **Outcome:** "Erase nothing"
+* **Correctness:** **correct.**
+    * If `elem1 == elem2`, the range `[elem1, elem2)` is an **empty range**.
+    * No elements are erased.
+    * The function will simply return `elem2` (which is equal to `elem1`).
+    * This is a well-defined and common scenario, often used to indicate "erase nothing."
+
+### Case 2: `elem2` is the off-the-end iterator (e.g., `slist.end()`), and `elem1` is a valid iterator (e.g., `slist.begin()` or somewhere in the middle).
+
+* Passing `slist.end()` as the `last` iterator (`elem2`) is perfectly **valid and common**.
+* `slist.erase(slist.begin(), slist.end())` is the standard way to **clear an entire `std::list`**.
+* If `elem1` points to an element somewhere in the middle, and `elem2` is `slist.end()`, it will erase all elements from `elem1` up to the end of the list.
+* The function will return `slist.end()` (or a valid iterator to the position that *was* `slist.end()`, now representing the new end of the list).
+* There is no undefined behavior here.
+
+### Case 3: Both `elem1` and `elem2` are the off-the-end iterator (`slist.end()`).
+
+* If `elem1 == slist.end()` and `elem2 == slist.end()`, the range `[slist.end(), slist.end())` is an **empty range**.
+* No elements are erased.
+* The function will simply return `slist.end()`.
+* This is also well-defined and does not lead to undefined behavior.
+
+### Summary:
+
+* **`elem1 == elem2` (including when both are `end()`):** No elements are erased. The function returns `elem2`. This is **well-defined**.
+* **`elem2` is `end()` and `elem1` is not `end()`:** All elements from `elem1` up to the end of the container are erased. The function returns `slist.end()`. This is **well-defined**.
+
+The only time `erase` (or almost any other standard library function) would lead to undefined behavior related to iterators is if you pass it an **invalid** iterator (e.g., one that has already been invalidated by a previous operation, or a default-constructed iterator) or an iterator that is outside the valid range `[begin(), end()]` for the container (except for `end()` itself, which is a valid boundary iterator).
+
+---
+
