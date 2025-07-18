@@ -3,6 +3,8 @@ a.out
 temp.cpp
 ifile.txt
 ofile.txt
-.vscode
+.vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
 doc
 DoxyfileLocal
