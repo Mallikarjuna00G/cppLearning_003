@@ -1,0 +1,5 @@
+# lib/CMakeLists.txt
+add_subdirectory(displaySeqContainer)
+add_subdirectory(support_forwardList)
+add_subdirectory(support_list)
+add_subdirectory(support_vector)

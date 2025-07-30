@@ -22,26 +22,31 @@ set(CMAKE_CXX_EXTENSIONS OFF)      # Don't use compiler-specific extensions
 # For example, adding a simple common compile option
 add_compile_options(-Wall -Wextra -pedantic) # Good for warnings
 
+add_subdirectory(lib)
 # 4. Define the executable target
 #    We create an executable named '${PROJECT_NAME}'.
 #    List all the .cpp source files that belong to this executable.
 #    CMake automatically finds associated header files if they are in include paths.
 add_executable(${PROJECT_NAME}
     main.cpp
-    displaySeqContainer.cpp
-    support_forwardList.cpp
-    support_list.cpp
-    support_vector.cpp
 )
 
 # 5. Specify include directories
 #    Since all your .hpp files are in the same directory as your .cpp files,
 #    we just need to add the current source directory to the include paths.
 #    'PRIVATE' means these include directories are only needed for compiling this target itself.
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# target_include_directories(${PROJECT_NAME} PRIVATE
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+# )
 
+target_link_libraries(
+    ${PROJECT_NAME}
+    PRIVATE
+    "displaySeqContainer"
+    # "support_vector"
+    # "support_list"
+    # "support_forwardList"
+)
 
 # ====== START: For DOXYGEN Documentation =====
 
