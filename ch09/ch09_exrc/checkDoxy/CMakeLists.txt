@@ -48,6 +48,8 @@ target_link_libraries(
     # "support_forwardList"
 )
 
+
+
 # ====== START: For DOXYGEN Documentation =====
 
 # Include custom CMake script for Doxygen documentation generation
@@ -64,3 +66,11 @@ add_my_doxygen_target(
 
 
 # ====== END: For DOXYGEN Documentation =====
+
+# ====== START: For Testing =====
+set(GTEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../googletest")
+add_subdirectory("${GTEST_DIR}" "${CMAKE_BINARY_DIR}/googletest_build")
+enable_testing()
+include(GoogleTest)
+add_subdirectory(tests)
+# ====== END: For Testing =====

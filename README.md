@@ -8,6 +8,20 @@ Learning C++ from `C++ Primer 5th edition` written by `Stanley B. Lippman`, `Jos
 ---
 ---
 
+To successfully configure and build the subfolders (exercise folders) that are depending on
+the `cmake` build system, run either `getGoogleTest.ch` or `getGoogleTest.py` in this folder. 
+This downloads the *googletest release version 1.12.1*. This specific version is because we are 
+using C++11 concepts. Later versions of googletest require higher versions of C++.
+
+- `googletest` folder is ignored for tracking.
+- `ch09/ch09_exrc/checkDoxy` is the folder used for setting up the `cmake`, doxygen document generation and `googletest` environment.
+- `ch09/ch09_exrc/checkDoxy/cmakeBuilder.py` can be used to *configure*, *build*, and *launch* the cmake targets. To trigger more targets of cmake, update the python file.
+- For better organization, create a separate build directory and run CMake from within it to keep your source and build files distinct.
+- Command to start the doxygen documentation: `make doc` or `cmake --build build --target doc`.
+- Command to start testing: `make test` or `ctest` or `cmake --build build --target test`.
+
+---
+
 [ch01](./ch01/): Getting started
 
 ## Part 1: The Basics

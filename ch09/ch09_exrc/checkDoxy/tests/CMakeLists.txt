@@ -1,0 +1,4 @@
+add_subdirectory(displaySeqContainer_test)
+add_subdirectory(support_forwardList_test)
+add_subdirectory(support_list_test)
+add_subdirectory(support_vector_test)
