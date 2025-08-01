@@ -21,6 +21,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)      # Don't use compiler-specific extensions
 # These will apply default flags for Debug, Release etc.
 # For example, adding a simple common compile option
 add_compile_options(-Wall -Wextra -pedantic) # Good for warnings
+# set(COVERAGE_COMPILER_FLAGS "")
+set(COVERAGE_COMPILER_FLAGS "--coverage")  # This flag currently only works with GCC.
+# set(COVERAGE_COMPILER_FLAGS -fprofile-arcs -ftest-coverage)
+# add_compile_options(${COVERAGE_COMPILER_FLAGS})
+# add_link_options(${COVERAGE_COMPILER_FLAGS})
 
 add_subdirectory(lib)
 # 4. Define the executable target
@@ -30,6 +35,10 @@ add_subdirectory(lib)
 add_executable(${PROJECT_NAME}
     main.cpp
 )
+
+
+target_compile_options(${PROJECT_NAME} PRIVATE ${COVERAGE_COMPILER_FLAGS})
+target_link_options(${PROJECT_NAME} PRIVATE ${COVERAGE_COMPILER_FLAGS})
 
 # 5. Specify include directories
 #    Since all your .hpp files are in the same directory as your .cpp files,
@@ -83,3 +92,33 @@ add_custom_target(
     COMMENT "Running CTest to generate reports."
 )
 # ====== END: For Testing =====
+
+# ====== START: Coverage Report Generation =====
+# Add this after your enable_testing() and test discovery commands
+
+# Find gcovr to generate the report
+find_program(GCOVR_COMMAND gcovr)
+if(NOT GCOVR_COMMAND)
+    message(FATAL_ERROR "gcovr not found. Please install it with 'sudo apt install gcovr' or 'pip install gcovr'.")
+endif()
+
+add_custom_target(
+    coverage_report
+    # Create the output directory if it doesn't exist.
+    COMMAND ${CMAKE_COMMAND} -E make_directory unitTest_Coverage
+    # Run the gcovr command and output to the new directory.
+    COMMAND ${GCOVR_COMMAND} --root ${CMAKE_SOURCE_DIR} --html --html-details -o unitTest_Coverage/coverage.html
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating code coverage report in unitTest_Coverage folder..."
+    # Ensure this target depends on the tests being run
+    # DEPENDS your_test_suite_executable_name
+)
+
+# You would then run your tests separately to generate the .gcda files,
+# and then run this custom target to generate the report.
+# For example:
+# cmake --build . --target your_test_suite_executable_name
+# ctest
+# cmake --build . --target coverage_report
+
+# ====== END: Coverage Report Generation =====
