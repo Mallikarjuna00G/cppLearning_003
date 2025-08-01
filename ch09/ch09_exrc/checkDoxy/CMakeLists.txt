@@ -107,7 +107,7 @@ add_custom_target(
     # Create the output directory if it doesn't exist.
     COMMAND ${CMAKE_COMMAND} -E make_directory unitTest_Coverage
     # Run the gcovr command and output to the new directory.
-    COMMAND ${GCOVR_COMMAND} --root ${CMAKE_SOURCE_DIR} --html --html-details -o unitTest_Coverage/coverage.html
+    COMMAND ${GCOVR_COMMAND} --root ${CMAKE_SOURCE_DIR}  --exclude-directories "tests/" --exclude-directories "CMakeFiles/" --html --html-details -o unitTest_Coverage/coverage.html
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Generating code coverage report in unitTest_Coverage folder..."
     # Ensure this target depends on the tests being run
