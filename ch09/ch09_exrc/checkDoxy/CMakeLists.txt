@@ -57,68 +57,8 @@ target_link_libraries(
     # "support_forwardList"
 )
 
+set(REPO_LOC "${CMAKE_SOURCE_DIR}/../../../")
+set(REPO_LOC_CMAKE_SCRIPTS "${REPO_LOC}cmakeScripts")
 
-
-# ====== START: For DOXYGEN Documentation =====
-
-# Include custom CMake script for Doxygen documentation generation
-include(../../../DoxygenDoc.cmake)
-
-# Call the function defined in DoxygenDoc.cmake to add our project's documentation target
-# Using named arguments makes the call much clearer.
-add_my_doxygen_target(
-    PREFIX "MY_SIMPLE_DEBUG_PREFIX"
-    PRJ_NAME "${PROJECT_NAME}"
-    SOURCES "${PROJECT_SOURCE_DIR}"
-    PRJ_BRIEF ""
-    )
-
-
-# ====== END: For DOXYGEN Documentation =====
-
-# ====== START: For Testing =====
-set(REPORT_FORMAT "xml")  # xml or json
-set(GTEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../googletest")
-add_subdirectory("${GTEST_DIR}" "${CMAKE_BINARY_DIR}/googletest_build")
-enable_testing()
-include(GoogleTest)
-add_subdirectory(tests)
-
-# To generate test report altogether. It generates test report different than googletest test report.
-add_custom_target(
-    testReports
-    COMMAND ${CMAKE_CTEST_COMMAND} -D ExperimentalTest
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Running CTest to generate reports."
-)
-# ====== END: For Testing =====
-
-# ====== START: Coverage Report Generation =====
-# Add this after your enable_testing() and test discovery commands
-
-# Find gcovr to generate the report
-find_program(GCOVR_COMMAND gcovr)
-if(NOT GCOVR_COMMAND)
-    message(FATAL_ERROR "gcovr not found. Please install it with 'sudo apt install gcovr' or 'pip install gcovr'.")
-endif()
-
-add_custom_target(
-    coverage_report
-    # Create the output directory if it doesn't exist.
-    COMMAND ${CMAKE_COMMAND} -E make_directory unitTest_Coverage
-    # Run the gcovr command and output to the new directory.
-    COMMAND ${GCOVR_COMMAND} --root ${CMAKE_SOURCE_DIR}  --exclude-directories "tests/" --exclude-directories "CMakeFiles/" --html --html-details -o unitTest_Coverage/coverage.html
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Generating code coverage report in unitTest_Coverage folder..."
-    # Ensure this target depends on the tests being run
-    # DEPENDS your_test_suite_executable_name
-)
-
-# You would then run your tests separately to generate the .gcda files,
-# and then run this custom target to generate the report.
-# For example:
-# cmake --build . --target your_test_suite_executable_name
-# ctest
-# cmake --build . --target coverage_report
-
-# ====== END: Coverage Report Generation =====
+include("${REPO_LOC_CMAKE_SCRIPTS}/startDoxyDocGen.cmake")
+include("${REPO_LOC_CMAKE_SCRIPTS}/addForTesting.cmake")

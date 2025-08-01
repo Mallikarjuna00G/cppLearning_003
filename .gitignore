@@ -10,3 +10,4 @@ doc
 DoxyfileLocal
 build
 googletest
+py_venv
