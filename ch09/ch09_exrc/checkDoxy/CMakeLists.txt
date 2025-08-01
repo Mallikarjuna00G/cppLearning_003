@@ -68,9 +68,18 @@ add_my_doxygen_target(
 # ====== END: For DOXYGEN Documentation =====
 
 # ====== START: For Testing =====
+set(REPORT_FORMAT "xml")  # xml or json
 set(GTEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../googletest")
 add_subdirectory("${GTEST_DIR}" "${CMAKE_BINARY_DIR}/googletest_build")
 enable_testing()
 include(GoogleTest)
 add_subdirectory(tests)
+
+# To generate test report altogether. It generates test report different than googletest test report.
+add_custom_target(
+    testReports
+    COMMAND ${CMAKE_CTEST_COMMAND} -D ExperimentalTest
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running CTest to generate reports."
+)
 # ====== END: For Testing =====
