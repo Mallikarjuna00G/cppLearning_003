@@ -119,7 +119,6 @@ void displaySeqContainer(const std::list<int> &container); // New overload decla
  *
  * @param container A constant reference to the `std::forward_list<int>` to be displayed.
  * The function does not modify the container.
- * @return void
  */
 void displaySeqContainer(const std::forward_list<int> &container);
 
@@ -135,7 +134,6 @@ void displaySeqContainer(const std::forward_list<int> &container);
  *
  * @param container A constant reference to the `std::forward_list<int>` to be displayed.
  * The function does not modify the container.
- * @return void
  */
 void displaySeqContainer(const std::forward_list<std::string> &container);
 

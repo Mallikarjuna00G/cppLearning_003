@@ -71,7 +71,6 @@
  * The function will insert elements into this list.
  * @param str1 The string value to search for within the container.
  * @param str2 The string value to insert after `str1` (or at the end if `str1` is not found).
- * @return void
  */
 void fl_insertStr2AfterStr1(std::forward_list<std::string> &container,
                             std::string str1,
@@ -99,7 +98,6 @@ void fl_insertStr2AfterStr1(std::forward_list<std::string> &container,
  * The loop continues until `iter` reaches `container.end()`.
  *
  * @param container A non-constant reference to the `std::forward_list<int>` to be modified.
- * @return void
  */
 void removeEvenDupOdd(std::forward_list<int> &container);
 

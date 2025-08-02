@@ -44,7 +44,6 @@
  * The loop continues until `iter` reaches `container.end()`.
  *
  * @param container A non-constant reference to the `std::list<int>` to be modified.
- * @return void
  */
 void removeEvenDupOdd(std::list<int> &container);
 

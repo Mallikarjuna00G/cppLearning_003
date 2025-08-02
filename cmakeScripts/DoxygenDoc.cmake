@@ -38,7 +38,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
 
     # Define the arguments for cmake_parse_arguments
     set(options ALL GENERATE_LATEX) # Flags (boolean options)
-    set(oneValueArgs PREFIX PRJ_NAME PROJECT_VERSION OUTPUT_SUBDIR) # Options that take one value
+    set(oneValueArgs PREFIX PRJ_NAME PRJ_BRIEF PROJECT_VERSION OUTPUT_SUBDIR) # Options that take one value
     set(multiValueArgs SOURCES EXCLUDE_PATTERNS) # Options that take multiple values (lists)
 
     message(STATUS "DEBUG: Contents of ARGN BEFORE cmake_parse_arguments: '${ARGN}'")
@@ -56,22 +56,42 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     set(DOXYGEN_PROJECT_BRIEF       "${${PREFIX}_PRJ_BRIEF}")
     set(DOXYGEN_GENERATE_HTML       YES)
     set(DOXYGEN_HTML_OUTPUT       "html")
-    set(DOXYGEN_GENERATE_XML        YES)
+    set(DOXYGEN_GENERATE_XML        NO)
     set(DOXYGEN_XML_OUTPUT        "xml")
-    set(DOXYGEN_GENERATE_LATEX      YES) # Controlled by flag
+    set(DOXYGEN_GENERATE_LATEX      NO) # Controlled by flag
     set(DOXYGEN_LATEX_OUTPUT      "latex") # Controlled by flag
     set(DOXYGEN_RECURSIVE           YES) # Still recursive for inputs
+
     set(DOXYGEN_EXTRACT_ALL         YES)
+    set(DOXYGEN_EXTRACT_PRIVATE         YES)
+    set(DOXYGEN_EXTRACT_PRIV_VIRTUAL         YES)
+    set(DOXYGEN_EXTRACT_PACKAGE         YES)
+    set(DOXYGEN_EXTRACT_STATIC         YES)
+    set(DOXYGEN_EXTRACT_LOCAL_CLASSES         YES)
+    
     set(DOXYGEN_HIDE_UNDOC_MEMBERS  NO)
-    set(DOXYGEN_QUIET               YES)
+    set(DOXYGEN_QUIET               NO)
     set(DOXYGEN_OUTPUT_DIRECTORY  "doc")
     set(DOXYGEN_CREATE_SUBDIRS  YES)
     set(DOXYGEN_SOURCE_BROWSER  YES)
     set(DOXYGEN_INLINE_SOURCES  YES)
     set(DOXYGEN_STRIP_CODE_COMMENTS  YES)
+
+    set(DOXYGEN_DISABLE_INDEX  NO)
+    set(DOXYGEN_GENERATE_TREEVIEW  YES)
+    set(DOXYGEN_FULL_SIDEBAR  YES)
+    
+    
+    set(DOXYGEN_DOT_UML_DETAILS  YES)
+    set(DOXYGEN_UML_LOOK  YES)
+    set(DOXYGEN_GROUP_GRAPH  YES)
+    set(DOXYGEN_CLASS_GRAPH  YES)
+    set(DOXYGEN_COLLABORATION_GRAPH  YES)
     set(DOXYGEN_CALL_GRAPH  YES)
     set(DOXYGEN_CALLER_GRAPH  YES)
     set(DOXYGEN_DIR_GRAPH_MAX_DEPTH  3)
+    set(DOXYGEN_DOT_IMAGE_FORMAT  "svg")
+    set(DOXYGEN_INTERACTIVE_SVG  YES)
 
     # Handle EXCLUDE_PATTERNS - combine default with user-provided
     set(DEFAULT_EXCLUDE_PATTERNS
