@@ -1,0 +1,22 @@
+@startuml
+title My Flowchart Diagram: Iteration Process
+
+start
+:Initialize vi = {0,1,...}, iter = vi.begin(), temp = 0;
+
+while (iter != vi.end() and temp++ < 20)
+    :Print "Before insert call";
+    :Display vi;
+    if (*iter is odd) then (yes)
+        :Insert *iter at current iterator position;
+        :Update iter to new element's position;
+    else (no)
+    endif
+    :Print "After insert call";
+    :Display vi;
+    :Print separator line;
+    :Increment iter;
+endwhile (loop condition is false)
+
+stop
+@enduml

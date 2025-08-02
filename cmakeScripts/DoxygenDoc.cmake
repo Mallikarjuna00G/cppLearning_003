@@ -75,7 +75,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     set(DOXYGEN_EXTRACT_LOCAL_CLASSES         YES)
     
     set(DOXYGEN_HIDE_UNDOC_MEMBERS  NO)
-    set(DOXYGEN_QUIET               NO)
+    set(DOXYGEN_QUIET               YES)
     set(DOXYGEN_OUTPUT_DIRECTORY  "doc")
     set(DOXYGEN_CREATE_SUBDIRS  YES)
     set(DOXYGEN_SOURCE_BROWSER  YES)
@@ -98,6 +98,13 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     set(DOXYGEN_DIR_GRAPH_MAX_DEPTH  3)
     set(DOXYGEN_DOT_IMAGE_FORMAT  "svg")
     set(DOXYGEN_INTERACTIVE_SVG  YES)
+
+    # PlantUML
+    set(DOXYGEN_PLANTUML_JAR_PATH  "/usr/share/plantuml/plantuml.jar")
+    # set(DOXYGEN_PLANTUMLFILE_DIRS  "${CMAKE_SOURCE_DIR}/doc")  # This was introduced in 1.13.x of doxygen.
+    # For doxygen 1.9.4-4 use `\includedoc` command and `EXAMPLE_PATH` to gather the plantuml files.
+    set(DOXYGEN_EXAMPLE_PATH  "${CMAKE_SOURCE_DIR}/doc")
+
 
     # Handle EXCLUDE_PATTERNS - combine default with user-provided
     set(DEFAULT_EXCLUDE_PATTERNS
