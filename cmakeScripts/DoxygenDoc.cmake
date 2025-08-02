@@ -54,6 +54,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     # Configure Doxygen settings using the parsed arguments
     set(DOXYGEN_PROJECT_NAME        "${${PREFIX}_PRJ_NAME}")
     set(DOXYGEN_PROJECT_BRIEF       "${${PREFIX}_PRJ_BRIEF}")
+    set(DOXYGEN_PROJECT_LOGO       "${REPO_LOC}/doc/cppLearning_003_logo.svg")
     set(DOXYGEN_GENERATE_HTML       YES)
     set(DOXYGEN_HTML_OUTPUT       "html")
     set(DOXYGEN_GENERATE_XML        NO)
@@ -77,7 +78,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     set(DOXYGEN_INLINE_SOURCES  YES)
     set(DOXYGEN_STRIP_CODE_COMMENTS  YES)
 
-    set(DOXYGEN_DISABLE_INDEX  NO)
+    set(DOXYGEN_DISABLE_INDEX  YES)
     set(DOXYGEN_GENERATE_TREEVIEW  YES)
     set(DOXYGEN_FULL_SIDEBAR  YES)
     

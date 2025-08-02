@@ -6,7 +6,6 @@ ofile.txt
 .vscode/
 !.vscode/launch.json
 !.vscode/tasks.json
-doc
 DoxyfileLocal
 build
 googletest

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="55"
+   height="55"
+   viewBox="0 0 14.552083 14.552083"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="3.1811321"
+     inkscape:cx="17.289442"
+     inkscape:cy="41.966192"
+     inkscape:window-width="1366"
+     inkscape:window-height="745"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#ffb380;stroke-width:0.264583"
+       id="path3"
+       cx="7.2760415"
+       cy="7.1736445"
+       rx="6.7369881"
+       ry="6.7161951"
+       inkscape:label="background" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:0.264583"
+       x="4.3374615"
+       y="3.8259439"
+       id="text1"
+       inkscape:label="cpp"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print Bold';fill:#008080;stroke-width:0.264583"
+         x="4.3374615"
+         y="3.8259439">C++</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print';text-align:start;letter-spacing:0.3175px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:0.265;stroke-dasharray:none"
+       id="text2"
+       inkscape:label="learning"
+       transform="translate(-14.085977,0.33984823)"><textPath
+         xlink:href="#path9"
+         id="textPath9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print';letter-spacing:0.3175px;stroke-width:0.265;stroke-dasharray:none">learning</textPath></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:0.264583"
+       x="5.0291471"
+       y="12.018455"
+       id="text3"
+       inkscape:label="text_003"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11667px;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print Bold';stroke-width:0.264583"
+         x="5.0291471"
+         y="12.018455">003</tspan></text>
+    <path
+       style="fill:none;stroke-width:0.491952"
+       d="m 1.7728345,6.5068784 c 0,0 9.1831405,8.5944676 12.1708335,-2.5083115"
+       id="path8"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#d45500;stroke-width:0.357165"
+       id="path9"
+       transform="scale(-1,1)"
+       sodipodi:type="arc"
+       sodipodi:cx="-21.332186"
+       sodipodi:cy="5.6074991"
+       sodipodi:rx="6.6145835"
+       sodipodi:ry="3.0792475"
+       sodipodi:start="0.17453293"
+       sodipodi:end="2.9670597"
+       sodipodi:arc-type="arc"
+       d="m -14.818093,6.1422048 a 6.6145835,3.0792475 0 0 1 -6.514093,2.5445418 6.6145835,3.0792475 0 0 1 -6.514093,-2.5445417"
+       sodipodi:open="true" />
+  </g>
+</svg>
