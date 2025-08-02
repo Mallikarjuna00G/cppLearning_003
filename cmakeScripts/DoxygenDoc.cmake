@@ -51,12 +51,16 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
         message(FATAL_ERROR "add_my_doxygen_target: Missing required arguments.")
     endif()
 
+    # set(HOMEPAGE_MD_FILE "")
+    set(HOMEPAGE_MD_FILE "${CMAKE_SOURCE_DIR}/README.md")
     # Configure Doxygen settings using the parsed arguments
     set(DOXYGEN_PROJECT_NAME        "${${PREFIX}_PRJ_NAME}")
     set(DOXYGEN_PROJECT_BRIEF       "${${PREFIX}_PRJ_BRIEF}")
     set(DOXYGEN_PROJECT_LOGO       "${REPO_LOC}/doc/cppLearning_003_logo.svg")
+    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE       "${HOMEPAGE_MD_FILE}")
     set(DOXYGEN_GENERATE_HTML       YES)
     set(DOXYGEN_HTML_OUTPUT       "html")
+    set(DOXYGEN_HTML_COLORSTYLE       "TOGGLE")
     set(DOXYGEN_GENERATE_XML        NO)
     set(DOXYGEN_XML_OUTPUT        "xml")
     set(DOXYGEN_GENERATE_LATEX      NO) # Controlled by flag
@@ -78,6 +82,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     set(DOXYGEN_INLINE_SOURCES  YES)
     set(DOXYGEN_STRIP_CODE_COMMENTS  YES)
 
+    # Appearance
     set(DOXYGEN_DISABLE_INDEX  YES)
     set(DOXYGEN_GENERATE_TREEVIEW  YES)
     set(DOXYGEN_FULL_SIDEBAR  YES)
@@ -106,6 +111,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     # Add the custom target using doxygen_add_docs
     doxygen_add_docs("doc" # Use the parsed target name
         ${${PREFIX}_SOURCES}           # Use the parsed list of sources
+        "${HOMEPAGE_MD_FILE}"
         COMMENT "Generating Doxygen documentation for ${${PREFIX}_PROJECT_DISPLAY_NAME} (Target: ${${PREFIX}_NAME})"
         ${${PREFIX}_ALL}               # Pass the ALL flag if present
     )
