@@ -1,0 +1,4 @@
+span.tt, code {
+    background-color: var(--fragment-background-color);
+    border: 1px solid var(--fragment-border-color)
+}

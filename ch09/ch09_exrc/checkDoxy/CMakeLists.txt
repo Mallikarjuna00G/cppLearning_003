@@ -27,6 +27,7 @@ set(COVERAGE_COMPILER_FLAGS "--coverage")  # This flag currently only works with
 # add_compile_options(${COVERAGE_COMPILER_FLAGS})
 # add_link_options(${COVERAGE_COMPILER_FLAGS})
 
+add_subdirectory(exercise)
 add_subdirectory(lib)
 # 4. Define the executable target
 #    We create an executable named '${PROJECT_NAME}'.
@@ -51,10 +52,7 @@ target_link_options(${PROJECT_NAME} PRIVATE ${COVERAGE_COMPILER_FLAGS})
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
-    "displaySeqContainer"
-    # "support_vector"
-    # "support_list"
-    # "support_forwardList"
+    "exercise"
 )
 
 set(REPO_LOC "${CMAKE_SOURCE_DIR}/../../../")

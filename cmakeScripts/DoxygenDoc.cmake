@@ -28,7 +28,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     set(oneValueArgs PREFIX PRJ_NAME PRJ_BRIEF PROJECT_VERSION OUTPUT_SUBDIR) # Options that take one value
     set(multiValueArgs SOURCES EXCLUDE_PATTERNS) # Options that take multiple values (lists)
 
-    message(STATUS "DEBUG: Contents of ARGN BEFORE cmake_parse_arguments: '${ARGN}'")
+    # message(STATUS "DEBUG: Contents of ARGN BEFORE cmake_parse_arguments: '${ARGN}'")
     # Parse the arguments. All arguments after the PREFIX are parsed.
     # The parsed values will be stored in variables prefixed with `_${PREFIX}_`.
     cmake_parse_arguments("${PREFIX}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -45,7 +45,10 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
         "*/cmake_scripts/*"
         "*/test*/*"
     )
-    
+    set(HOMEPAGE_MD_FILE "README.md")
+
+    include(${REPO_LOC_CMAKE_SCRIPTS}/configureDoxygen.cmake)
+
     # Add the custom target using doxygen_add_docs
     doxygen_add_docs("doc" # Use the parsed target name
         ${${PREFIX}_SOURCES}           # Use the parsed list of sources
@@ -53,6 +56,6 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
         COMMENT "Generating Doxygen documentation for ${${PREFIX}_PROJECT_DISPLAY_NAME} (Target: ${${PREFIX}_NAME})"
         ${${PREFIX}_ALL}               # Pass the ALL flag if present
     )
-    message(STATUS "Doxygen target '${${PREFIX}_NAME}' configured. Output will be in: ${DOXY_HTML_OUTPUT}")
+    message(STATUS "Doxygen target '${${PREFIX}_PRJ_NAME}' configured. Output will be in: ${DOXYGEN_OUTPUT_DIRECTORY}")
 
 endfunction()
