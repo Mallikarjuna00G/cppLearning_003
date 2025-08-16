@@ -21,10 +21,8 @@ using C++11 concepts. Later versions of googletest require higher versions of C+
 
 ```console
 $ doxygen --version
-1.9.4
+1.14.0
 ```
-
-> doxygen 1.9.4-4 does not have `\plantumlfile` command and was actually introduced in around version 1.13.x. So to fetch and render the plantuml files in doxygen we need to use `\includedoc <file>`. And we must add the path of the plantuml files to `EXAMPLE_PATH` variable.
 
 ### **Note: Following commands shall be executed when inside the `build` folder**
 - Command to start the doxygen documentation: `make doc` or `cmake --build . --target doc`.
@@ -42,6 +40,8 @@ Run `getPythonModulesForVenv.sh`. **OR** Execute Step1 through Step5 in this loc
 - Step3: `source venv/bin/activate`
 - Step4: `pip install junit2html`
 - Step5: `deactivate`
+
+If you already have python environment with `junit2html`, you can update the variables `PY_VENV_NAME` and `PY_VENV_DIR`.
 
 - **NOTE:** The script/commands does add necessary scripts to the repo. Must successfully run to successfully build the exercise/projects. 
 

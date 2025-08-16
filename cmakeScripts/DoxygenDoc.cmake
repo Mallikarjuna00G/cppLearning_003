@@ -3,19 +3,6 @@
 # This script provides a CMake function to add Doxygen documentation targets.
 # It expects to be included from the top-level CMakeLists.txt or a subproject.
 
-# Require dot, treat the other components as optional
-find_package(Doxygen
-             REQUIRED dot
-             OPTIONAL_COMPONENTS mscgen dia)
-
-if (NOT DOXYGEN_FOUND)
-    message(WARNING "Doxygen not found. The 'add_my_doxygen_target' function will not be available or functional.")
-    return() # Exit script if Doxygen is not found
-endif()
-
-message(STATUS "Doxygen found: ${DOXYGEN_EXECUTABLE} (version ${DOXYGEN_VERSION})")
-message(STATUS "Graphviz dot found: ${DOXYGEN_DOT_EXECUTABLE}")
-
 # =========================================================================
 # CMake Function: add_my_doxygen_target
 # -------------------------------------------------------------------------
@@ -51,61 +38,6 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
         message(FATAL_ERROR "add_my_doxygen_target: Missing required arguments.")
     endif()
 
-    # set(HOMEPAGE_MD_FILE "")
-    set(HOMEPAGE_MD_FILE "${CMAKE_SOURCE_DIR}/README.md")
-    # Configure Doxygen settings using the parsed arguments
-    set(DOXYGEN_PROJECT_NAME        "${${PREFIX}_PRJ_NAME}")
-    set(DOXYGEN_PROJECT_BRIEF       "${${PREFIX}_PRJ_BRIEF}")
-    set(DOXYGEN_PROJECT_LOGO       "${REPO_LOC}/doc/cppLearning_003_logo.svg")
-    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE       "${HOMEPAGE_MD_FILE}")
-    set(DOXYGEN_GENERATE_HTML       YES)
-    set(DOXYGEN_HTML_OUTPUT       "html")
-    set(DOXYGEN_HTML_COLORSTYLE       "TOGGLE")
-    set(DOXYGEN_GENERATE_XML        NO)
-    set(DOXYGEN_XML_OUTPUT        "xml")
-    set(DOXYGEN_GENERATE_LATEX      NO) # Controlled by flag
-    set(DOXYGEN_LATEX_OUTPUT      "latex") # Controlled by flag
-    set(DOXYGEN_RECURSIVE           YES) # Still recursive for inputs
-
-    set(DOXYGEN_EXTRACT_ALL         YES)
-    set(DOXYGEN_EXTRACT_PRIVATE         YES)
-    set(DOXYGEN_EXTRACT_PRIV_VIRTUAL         YES)
-    set(DOXYGEN_EXTRACT_PACKAGE         YES)
-    set(DOXYGEN_EXTRACT_STATIC         YES)
-    set(DOXYGEN_EXTRACT_LOCAL_CLASSES         YES)
-    
-    set(DOXYGEN_HIDE_UNDOC_MEMBERS  NO)
-    set(DOXYGEN_QUIET               YES)
-    set(DOXYGEN_OUTPUT_DIRECTORY  "doc")
-    set(DOXYGEN_CREATE_SUBDIRS  YES)
-    set(DOXYGEN_SOURCE_BROWSER  YES)
-    set(DOXYGEN_INLINE_SOURCES  YES)
-    set(DOXYGEN_STRIP_CODE_COMMENTS  YES)
-
-    # Appearance
-    set(DOXYGEN_DISABLE_INDEX  YES)
-    set(DOXYGEN_GENERATE_TREEVIEW  YES)
-    set(DOXYGEN_FULL_SIDEBAR  YES)
-    
-    
-    set(DOXYGEN_DOT_UML_DETAILS  YES)
-    set(DOXYGEN_UML_LOOK  YES)
-    set(DOXYGEN_GROUP_GRAPH  YES)
-    set(DOXYGEN_CLASS_GRAPH  YES)
-    set(DOXYGEN_COLLABORATION_GRAPH  YES)
-    set(DOXYGEN_CALL_GRAPH  YES)
-    set(DOXYGEN_CALLER_GRAPH  YES)
-    set(DOXYGEN_DIR_GRAPH_MAX_DEPTH  3)
-    set(DOXYGEN_DOT_IMAGE_FORMAT  "svg")
-    set(DOXYGEN_INTERACTIVE_SVG  YES)
-
-    # PlantUML
-    set(DOXYGEN_PLANTUML_JAR_PATH  "/usr/share/plantuml/plantuml.jar")
-    # set(DOXYGEN_PLANTUMLFILE_DIRS  "${CMAKE_SOURCE_DIR}/doc")  # This was introduced in 1.13.x of doxygen.
-    # For doxygen 1.9.4-4 use `\includedoc` command and `EXAMPLE_PATH` to gather the plantuml files.
-    set(DOXYGEN_EXAMPLE_PATH  "${CMAKE_SOURCE_DIR}/doc")
-
-
     # Handle EXCLUDE_PATTERNS - combine default with user-provided
     set(DEFAULT_EXCLUDE_PATTERNS
         "*/build/*"
@@ -113,8 +45,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
         "*/cmake_scripts/*"
         "*/test*/*"
     )
-    set(DOXYGEN_EXCLUDE_PATTERNS ${DEFAULT_EXCLUDE_PATTERNS} ${${PREFIX}_EXCLUDE_PATTERNS})
-
+    
     # Add the custom target using doxygen_add_docs
     doxygen_add_docs("doc" # Use the parsed target name
         ${${PREFIX}_SOURCES}           # Use the parsed list of sources

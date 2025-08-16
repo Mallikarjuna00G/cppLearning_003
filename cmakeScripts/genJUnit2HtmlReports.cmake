@@ -6,11 +6,12 @@ if(NOT PYTHON_EXECUTABLE)
 endif()
 
 set(PY_VENV_NAME "py_venv")
-set(VENV_DIR "${REPO_LOC}${PY_VENV_NAME}")
+# set(PY_VENV_DIR "${REPO_LOC}${PY_VENV_NAME}")
+set(PY_VENV_DIR "~/${PY_VENV_NAME}")
 
 set(PY_MODULE "junit2html")
 # We will use this variable to store the path to the junit2html executable
-set(JUNIT2HTML_EXECUTABLE "${VENV_DIR}/bin/${PY_MODULE}")
+set(JUNIT2HTML_EXECUTABLE "${PY_VENV_DIR}/bin/${PY_MODULE}")
 set(REPORTS_DIR "${CMAKE_BINARY_DIR}/Testing/Reports")
 # The custom target will check for the executable's existence and install if needed.
 add_custom_target(
