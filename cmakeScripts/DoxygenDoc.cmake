@@ -23,10 +23,28 @@
 # =========================================================================
 function(add_my_doxygen_target) # PREFIX is a required positional argument for cmake_parse_arguments
 
+    set(HOMEPAGE_MD_FILE "README.md")
+    set(DEFAULT_EXCLUDES 
+        "${CMAKE_SOURCE_DIR}/build"
+        "${CMAKE_SOURCE_DIR}/cmakeScripts"
+        "${CMAKE_SOURCE_DIR}/test"
+        "${CMAKE_SOURCE_DIR}/_deps"
+    )
+    set(DOC_EXCLUDES ${DEFAULT_EXCLUDES})
+
+    # Handle EXCLUDE_PATTERNS - combine default with user-provided
+    set(DEFAULT_EXCLUDE_PATTERNS
+        "${CMAKE_SOURCE_DIR}/build/*"
+        "${CMAKE_SOURCE_DIR}/_deps/*"
+        "${CMAKE_SOURCE_DIR}/cmake_scripts/*"
+        "${CMAKE_SOURCE_DIR}/test/*"
+    )
+    set(DOC_EXCLUDE_PATTERNS ${DEFAULT_EXCLUDE_PATTERNS})
+    
     # Define the arguments for cmake_parse_arguments
     set(options ALL GENERATE_LATEX) # Flags (boolean options)
-    set(oneValueArgs PREFIX PRJ_NAME PRJ_BRIEF PROJECT_VERSION OUTPUT_SUBDIR) # Options that take one value
-    set(multiValueArgs SOURCES EXCLUDE_PATTERNS) # Options that take multiple values (lists)
+    set(oneValueArgs PREFIX PRJ_NAME PRJ_BRIEF HOMEPAGE_MD_FILE) # Options that take one value
+    set(multiValueArgs SOURCES EXCLUDE EXCLUDE_PATTERNS) # Options that take multiple values (lists)
 
     # message(STATUS "DEBUG: Contents of ARGN BEFORE cmake_parse_arguments: '${ARGN}'")
     # Parse the arguments. All arguments after the PREFIX are parsed.
@@ -38,14 +56,15 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
         message(FATAL_ERROR "add_my_doxygen_target: Missing required arguments.")
     endif()
 
-    # Handle EXCLUDE_PATTERNS - combine default with user-provided
-    set(DEFAULT_EXCLUDE_PATTERNS
-        "*/build/*"
-        "*/_deps/*"
-        "*/cmake_scripts/*"
-        "*/test*/*"
-    )
-    set(HOMEPAGE_MD_FILE "README.md")
+    if (${PREFIX}_HOMEPAGE_MD_FILE)
+        set(HOMEPAGE_MD_FILE ${PREFIX}_HOMEPAGE_MD_FILE)
+    endif()
+    if (${PREFIX}_EXCLUDE)
+        set(DOC_EXCLUDES ${PREFIX}_EXCLUDE)
+    endif()
+    if (${PREFIX}_EXCLUDE_PATTERNS)
+        set(DOC_EXCLUDE_PATTERNS ${PREFIX}_EXCLUDE_PATTERNS)
+    endif()
 
     include(${REPO_LOC_CMAKE_SCRIPTS}/configureDoxygen.cmake)
 
@@ -53,7 +72,7 @@ function(add_my_doxygen_target) # PREFIX is a required positional argument for c
     doxygen_add_docs("doc" # Use the parsed target name
         ${${PREFIX}_SOURCES}           # Use the parsed list of sources
         "${HOMEPAGE_MD_FILE}"
-        COMMENT "Generating Doxygen documentation for ${${PREFIX}_PROJECT_DISPLAY_NAME} (Target: ${${PREFIX}_NAME})"
+        COMMENT "Generating Doxygen documentation for ${${PREFIX}_PRJ_NAME}"
         ${${PREFIX}_ALL}               # Pass the ALL flag if present
     )
     message(STATUS "Doxygen target '${${PREFIX}_PRJ_NAME}' configured. Output will be in: ${DOXYGEN_OUTPUT_DIRECTORY}")

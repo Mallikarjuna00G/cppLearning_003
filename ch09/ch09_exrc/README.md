@@ -511,7 +511,7 @@ The only time `erase` (or almost any other standard library function) would lead
 
 ---
 
-### ch09_exrc_9p29
+## ch09_exrc_9p29
 
 Exercise 9.29: Given that `vec` holds 25 elements, what does `vec.resize(100)` do? What if we next wrote `vec.resize(10)`?
 
@@ -523,7 +523,7 @@ vec.resize(10);  // vec.size() is 10. All the remaining elements are discarded.
 
 ---
 
-### ch09_exrc_9p30
+## ch09_exrc_9p30
 
 Exercise 9.30: What, if any, restrictions does using the version of `resize` that takes a single argument place on the element type?
 
@@ -545,7 +545,7 @@ The element type `T` must have a way for the compiler to create an object of typ
 
 ---
 
-### ch09_exrc_9p31
+## ch09_exrc_9p31
 
 Exercise 9.31: The program on page 354 to remove even-valued elements and duplicate odd ones will not work on a `list` or `forward_list`. Why? Revise the program so that it works on these types as well.
 
@@ -596,7 +596,7 @@ In essence, the `std::vector` code relies on its iterators being random-access a
 
 ---
 
-### ch09_exrc_9p32
+## ch09_exrc_9p32
 
 Exercise 9.32: In the program on page 354 would it be legal to write the call to `insert` as follows? If not, why not?
 
@@ -651,7 +651,7 @@ Since the order of evaluation of function arguments is **unspecified**, the comp
 
 ---
 
-### ch09_exrc_9p33
+## ch09_exrc_9p33
 
 Exercise 9.33: In the final example in this section what would happen if we did not assign the result of `insert` to `begin`? Write a program that omits this assignment to see if your expectation was correct.
 
@@ -734,7 +734,7 @@ make: *** [Makefile:59: run] Aborted (core dumped)
 
 ---
 
-### ch09_exrc_9p34
+## ch09_exrc_9p34
 
 Exercise 9.34: Assuming `vi` is a container of `int`s that includes even and odd values, predict the behavior of the following loop. After you've analyzed this loop, write a program to test whether your expectations were correct.
 
@@ -763,3 +763,38 @@ This will become,
 ```
 
 **Code:** [ch09_exrc_9p34](./ch09_exrc_9p34/) <br/>*NOTE: This will run indefinitely.*
+
+## ch09_exrc_9p35
+
+Exercise 9.35: Explain the difference between a `vector`’s `capacity` and its `size`.
+
+**`Size`** is the number of elements currently stored in the `vector`. It reflects the logical number of elements you can access or iterate over.
+
+**`Capacity`** is the total number of elements the `vector` can hold before it needs to reallocate memory to accommodate more elements. It represents the physical memory allocated for the `vector`'s storage.
+
+Think of it like a train: the **`size`** is the number of passengers currently on the train, while the **`capacity`** is the total number of seats available. Even if the train has 50 seats (**capacity**), there might only be 20 passengers on it (**size**). If a 21st passenger boards, the **size** increases, but the **capacity** remains the same. If the 51st passenger tries to board, the train must add a new car, increasing its **capacity**.
+
+---
+
+## ch09_exrc_9p36
+
+Exercise 9.36: Can a container have a `capacity` less than its `size`?
+
+A container's `capacity` can **never** be less than its `size`.
+
+The `capacity` represents the total physical memory allocated for the elements, while the `size` is the number of elements currently occupying that space. It's impossible for a container to hold more elements than the memory it has reserved. When a `vector`'s `size` reaches its `capacity`, it must reallocate a larger block of memory before it can add another element.
+
+---
+
+## ch09_exrc_9p37
+
+Exercise 9.37: Why don’t `list` or `array` have a `capacity` member?
+
+Neither `list` nor `array` have a `capacity` member because of how they manage their memory.
+
+* A **`list`** is implemented as a doubly-linked list. Each element is an independent object that contains both the data and pointers to the previous and next elements. New elements are added dynamically and can be placed anywhere in the list without needing a contiguous block of memory. Therefore, there is no concept of a single, reserved block of memory that might need to be reallocated. The size and capacity are effectively the same at all times.
+
+* An **`array`** is a fixed-size, contiguous block of memory. When you define an `array`, its size is set at compile-time and cannot change. The memory for all its elements is allocated upfront. Since its size is fixed, it doesn't need to track a separate `capacity`—its `size` is its `capacity`.
+
+---
+

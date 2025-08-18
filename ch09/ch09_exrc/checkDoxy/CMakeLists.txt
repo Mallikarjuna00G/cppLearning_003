@@ -59,4 +59,21 @@ set(REPO_LOC "${CMAKE_SOURCE_DIR}/../../../")
 set(REPO_LOC_CMAKE_SCRIPTS "${REPO_LOC}cmakeScripts")
 
 include("${REPO_LOC_CMAKE_SCRIPTS}/startDoxyDocGen.cmake")
+
+# Call the function defined in DoxygenDoc.cmake to add our project's documentation target
+# Using named arguments makes the call much clearer.
+add_my_doxygen_target(
+    PREFIX "MY_SIMPLE_DEBUG_PREFIX"
+    PRJ_NAME "${PROJECT_NAME}"
+    PRJ_BRIEF ""
+    SOURCES 
+        "${CMAKE_SOURCE_DIR}/main.cpp"
+        "${CMAKE_SOURCE_DIR}/exercise/"
+        "${CMAKE_SOURCE_DIR}/lib/"
+    EXCLUDE
+        "${CMAKE_SOURCE_DIR}/build"
+        "${CMAKE_SOURCE_DIR}/_deps"
+        "${CMAKE_SOURCE_DIR}/test"
+)
+
 include("${REPO_LOC_CMAKE_SCRIPTS}/addForTesting.cmake")
