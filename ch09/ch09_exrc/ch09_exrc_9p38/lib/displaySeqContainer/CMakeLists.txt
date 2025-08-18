@@ -1,13 +1,8 @@
-set(LIBRARY_NAME "exercise")
-
+# lib/displaySeqContainer/CMakeLists.txt
+set(LIBRARY_NAME "displaySeqContainer")
 add_library(
     ${LIBRARY_NAME}
     ${LIBRARY_NAME}.cpp
-)
-
-target_link_libraries(
-    ${LIBRARY_NAME}
-    "displaySeqContainer"
 )
 
 target_include_directories(

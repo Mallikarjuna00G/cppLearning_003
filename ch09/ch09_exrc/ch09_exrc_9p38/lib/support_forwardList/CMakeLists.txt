@@ -1,13 +1,8 @@
-set(LIBRARY_NAME "exercise")
-
+# lib/support_forwardList/CMakeLists.txt
+set(LIBRARY_NAME "support_forwardList")
 add_library(
     ${LIBRARY_NAME}
     ${LIBRARY_NAME}.cpp
-)
-
-target_link_libraries(
-    ${LIBRARY_NAME}
-    "displaySeqContainer"
 )
 
 target_include_directories(

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "exercise.hpp"
+#include "displaySeqContainer.hpp"
 
 using std::vector;
 using std::cout;
@@ -34,8 +35,4 @@ int exercise() {
     dispVectorSizeAndCapacity(ivec2);
 
     return EXIT_SUCCESS;
-}
-
-void dispVectorSizeAndCapacity(const vector<int>& vec) {
-    cout << "Vector (size : capacity) :: " << vec.size() << " : " << vec.capacity() << endl;
 }

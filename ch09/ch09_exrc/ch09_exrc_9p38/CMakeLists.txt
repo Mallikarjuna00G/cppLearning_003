@@ -9,10 +9,23 @@ add_compile_options(-Wall -Wextra -pedantic)
 set(COVERAGE_COMPILER_FLAGS "--coverage")
 
 add_subdirectory(exercise)
+add_subdirectory(lib)
 
 add_custom_target(
     run_app
-    ./${PROJECT_NAME}
+    COMMAND ${PROJECT_NAME}
+    DEPENDS ${PROJECT_NAME}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running application ${PROJECT_NAME}"
+)
+
+add_custom_target(
+    help2
+    COMMAND ${CMAKE_COMMAND} -E echo "Helpful targets for this project:"
+    COMMAND ${CMAKE_COMMAND} -E echo "  -->  run_app - Run the application"
+    COMMAND ${CMAKE_COMMAND} -E echo "  -->  doc     - Generate Doxygen documentation"
+    COMMENT "Displays help information about custom targets."
+    VERBATIM
 )
 
 add_executable(
@@ -51,6 +64,7 @@ add_my_doxygen_target(
     SOURCES 
         "${CMAKE_SOURCE_DIR}/main.cpp"
         "${CMAKE_SOURCE_DIR}/exercise/"
+        "${CMAKE_SOURCE_DIR}/lib/"
     PRJ_BRIEF "Documentation for ${PROJECT_NAME}"
     EXCLUDE
         "${CMAKE_SOURCE_DIR}/build"

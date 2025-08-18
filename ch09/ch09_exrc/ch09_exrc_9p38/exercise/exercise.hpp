@@ -25,16 +25,4 @@
  */
 int exercise();
 
-/**
- * @brief Displays the current size and capacity of a constant `std::vector<int>`.
- *
- * This helper function provides a concise way to output the `size()` and
- * `capacity()` of a given vector to standard output. It is intended for
- * debugging and educational purposes.
- *
- * @param vec A constant reference to the vector whose size and capacity will be
- * displayed.
- */
-void dispVectorSizeAndCapacity(const std::vector<int>& vec);
-
 #endif // EXERCISE_HPP
