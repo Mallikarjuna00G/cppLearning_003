@@ -798,3 +798,58 @@ Neither `list` nor `array` have a `capacity` member because of how they manage t
 
 ---
 
+## ch09_exrc_9p39
+
+Exercise 9.39: Explain what the following program fragment does:
+
+```cpp
+vector<string> svec;
+svec.reserve(1024);
+
+string word;
+while (cin >> word)
+  svec.push_back(word);
+
+svec.resize(svec.size()+svec.size()/2);
+```
+
+This program fragment reads words from standard input and stores them in a `vector<string>`. The `reserve` call pre-allocates memory to avoid multiple reallocations, and the `resize` call then increases the size of the vector.
+
+Here's a step-by-step breakdown:
+
+* **`vector<string> svec;`**: A `vector` named `svec` is created to hold `string` objects.
+* **`svec.reserve(1024);`**: This line pre-allocates memory for at least 1024 strings. This is a performance optimization that prevents the `vector` from having to reallocate its internal buffer as it grows, which can be an expensive operation. The `size` of the vector remains 0.
+* **`while (cin >> word) svec.push_back(word);`**: This loop reads words from standard input (e.g., from the keyboard or a redirected file) one by one and adds them to `svec`. The `size` of the vector grows with each word read.
+* **`svec.resize(svec.size() + svec.size()/2);`**: After the loop finishes, this line resizes the vector. The new size is the current size plus half of the current size, effectively increasing the number of elements in the vector by 50%. The new elements are default-initialized (empty strings). If the new size is larger than the current capacity, the vector will reallocate memory to accommodate the change.
+
+[ch09_exrc_9p39](./ch09_exrc_9p39/)
+
+```console
+$ make run_app/fast 
+Running application ch09_exrc_9p38
+On fresh declaration: 
+Vector (size : capacity) :: 0 : 0
+On reserve(1024): 
+Vector (size : capacity) :: 0 : 1024
+While feeding: 
+their time
+Vector (size : capacity) :: 1 : 1024
+Vector (size : capacity) :: 2 : 1024
+can't go back
+Vector (size : capacity) :: 3 : 1024
+Vector (size : capacity) :: 4 : 1024
+Vector (size : capacity) :: 5 : 1024
+they will laugh
+Vector (size : capacity) :: 6 : 1024
+Vector (size : capacity) :: 7 : 1024
+Vector (size : capacity) :: 8 : 1024
+once they drown inside my love
+Vector (size : capacity) :: 9 : 1024
+Vector (size : capacity) :: 10 : 1024
+Vector (size : capacity) :: 11 : 1024
+Vector (size : capacity) :: 12 : 1024
+Vector (size : capacity) :: 13 : 1024
+Vector (size : capacity) :: 14 : 1024
+After resize 
+Vector (size : capacity) :: 21 : 1024
+```
