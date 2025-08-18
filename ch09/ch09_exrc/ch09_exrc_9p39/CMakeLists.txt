@@ -69,3 +69,5 @@ add_my_doxygen_target(
     EXCLUDE
         "${CMAKE_SOURCE_DIR}/build"
 )
+
+include("${REPO_LOC_CMAKE_SCRIPTS}/addForTesting.cmake")
