@@ -24,6 +24,9 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E echo "Helpful targets for this project:"
     COMMAND ${CMAKE_COMMAND} -E echo "  -->  run_app - Run the application"
     COMMAND ${CMAKE_COMMAND} -E echo "  -->  doc     - Generate Doxygen documentation"
+    COMMAND ${CMAKE_COMMAND} -E echo "  -->  test     - Run the tests"
+    COMMAND ${CMAKE_COMMAND} -E echo "  -->  coverage_report     - Unit test coverage reports (gcovr)"
+    COMMAND ${CMAKE_COMMAND} -E echo "  -->  junit2html_reports     - Googletest xml reports in html format using junit2html"
     COMMENT "Displays help information about custom targets."
     VERBATIM
 )
@@ -53,6 +56,7 @@ target_link_libraries(
 
 set(REPO_LOC "${CMAKE_SOURCE_DIR}/../../../")
 set(REPO_LOC_CMAKE_SCRIPTS "${REPO_LOC}/cmakeScripts")
+set(REPO_LOC_OTHER_SCRIPTS "${REPO_LOC}/otherScripts")
 
 include(${REPO_LOC_CMAKE_SCRIPTS}/startDoxyDocGen.cmake)
 

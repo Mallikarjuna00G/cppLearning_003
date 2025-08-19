@@ -7,23 +7,26 @@ endif()
 
 set(PY_VENV_NAME "py_venv")
 # set(PY_VENV_DIR "${REPO_LOC}${PY_VENV_NAME}")
-set(PY_VENV_DIR "~/${PY_VENV_NAME}")
+set(PY_VENV_DIR "$ENV{HOME}/${PY_VENV_NAME}")
 
 set(PY_MODULE "junit2html")
 # We will use this variable to store the path to the junit2html executable
 set(JUNIT2HTML_EXECUTABLE "${PY_VENV_DIR}/bin/${PY_MODULE}")
 set(REPORTS_DIR "${CMAKE_BINARY_DIR}/Testing/Reports")
-# The custom target will check for the executable's existence and install if needed.
+
+set(FILENAME_TO_COPY "gen_junit2html_reports.sh")
+file(COPY_FILE ${REPO_LOC_OTHER_SCRIPTS}/${FILENAME_TO_COPY} ${CMAKE_BINARY_DIR}/${FILENAME_TO_COPY})
+
+
+# Create a master target that depends on all the individual HTML reports.
+# This makes it easy to generate all of them by building this single target.
 add_custom_target(
-    combined_junit_report
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${REPORTS_DIR}/combined_junit_report"
-    COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_BINARY_DIR} ${JUNIT2HTML_EXECUTABLE} "${REPORTS_DIR}/*.xml" "${REPORTS_DIR}/combined_junit_report/combined_junit_report.html"
+    junit2html_reports
+    # This is the command that will be executed when you build this target.
+    # It calls a shell to run the bash script located in the binary directory.
+    COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_BINARY_DIR} bash "${CMAKE_BINARY_DIR}/${FILENAME_TO_COPY}"
 
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Automating the setup and generation of a combined JUnit HTML report."
-
-    # Add a dependency to ensure the tests have run and the XML files exist
-    # DEPENDS your_test_suite_executable_name
+    COMMENT "Running bash script to generate combined JUnit HTML report."
 )
 
 # ====== END: Test Report Generation =====
