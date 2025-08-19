@@ -15,5 +15,5 @@ target_link_libraries(
 gtest_discover_tests(
     ${testSuite}
     PROPERTIES
-        ENVIRONMENT "GTEST_OUTPUT=xml:${CMAKE_BINARY_DIR}/Testing/Reports/${testSuite}Report.${REPORT_FORMAT}"
+        ENVIRONMENT "GTEST_OUTPUT=xml:${CMAKE_BINARY_DIR}/Testing/Reports/"
 )
