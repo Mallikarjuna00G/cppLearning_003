@@ -853,3 +853,23 @@ Vector (size : capacity) :: 14 : 1024
 After resize 
 Vector (size : capacity) :: 21 : 1024
 ```
+
+## ch09_exrc_9p40
+
+Exercise 9.40: If the program in the previous exercise reads 256 words, what is its likely capacity after it is resized? What if it reads 512? 1,000? 1,048?
+
+The program starts with a `vector<string>` named `svec` and reserves capacity for 1024 elements. This means the vector has space for 1024 elements without needing to reallocate memory, even if it starts with a size of 0.
+
+The `while` loop reads words from the standard input (`cin`) and adds them to the vector using `push_back`. This increases the vector's `size` but not its `capacity` until it exceeds the reserved 1024.
+
+Finally, the `resize` function changes the vector's `size` to `svec.size() + svec.size() / 2`. This operation may or may not change the `capacity`. The capacity will only change if the new size is greater than the current capacity.
+
+Let's apply this logic to each case:
+
+* **256 words:** The vector initially has a capacity of 1024. After reading 256 words, its size is 256 and its capacity is still 1024. The `resize` operation changes the size to $256 + 256/2 = 256 + 128 = 384$. Since 384 is less than the current capacity of 1024, the capacity **remains 1024**.
+
+* **512 words:** After reading 512 words, the size is 512 and the capacity is 1024. The `resize` operation changes the size to $512 + 512/2 = 512 + 256 = 768$. Since 768 is less than 1024, the capacity **remains 1024**.
+
+* **1,000 words:** After reading 1,000 words, the size is 1,000 and the capacity is 1024. The `resize` operation changes the size to $1000 + 1000/2 = 1000 + 500 = 1500$. Since 1500 is greater than the current capacity of 1024, the vector must reallocate. The new capacity will be at least 1500. Most `vector` implementations double their capacity when they need to resize, so the new capacity would likely be **2048**.
+
+* **1,048 words:** After reading 1,048 words, the vector has exceeded its initial capacity of 1024. A reallocation has already occurred. The capacity would have been expanded to at least 1048. Assuming a doubling strategy, the capacity would have likely been expanded to 2048. The `resize` operation changes the size to $1048 + 1048/2 = 1048 + 524 = 1572$. This is less than the current likely capacity of 2048, so the capacity **remains 2048**.

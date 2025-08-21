@@ -45,6 +45,8 @@ If you already have python environment with `junit2html`, you can update the var
 
 - **NOTE:** The script/commands does add necessary scripts to the repo. Must successfully run to successfully build the exercise/projects. 
 
+- You many also want to see the execution logs from `<project/exercise directory>/build/tests/exercise_test/executionLogs`
+
 ---
 
 [ch01](./ch01/): Getting started
