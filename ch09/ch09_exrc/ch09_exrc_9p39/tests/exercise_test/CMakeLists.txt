@@ -14,8 +14,7 @@ target_link_libraries(
     "displaySeqContainer"
 )
 
-gtest_discover_tests(
-    ${testSuite}
-    PROPERTIES
-        ENVIRONMENT "GTEST_OUTPUT=${REPORT_FORMAT}:${CMAKE_BINARY_DIR}/Testing/Reports/"
+add_test(
+    NAME ${testSuite}
+    COMMAND ${testSuite} --gtest_output=${REPORT_FORMAT}:${CMAKE_BINARY_DIR}/Testing/Reports/${testSuite}.xml
 )
