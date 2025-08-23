@@ -8,22 +8,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_options(-Wall -Wextra -pedantic)
 set(COVERAGE_COMPILER_FLAGS "--coverage")
 
+set(REPO_LOC "${CMAKE_SOURCE_DIR}/../../../")
+set(REPO_LOC_CMAKE_SCRIPTS "${REPO_LOC}/cmakeScripts")
+set(REPO_LOC_OTHER_SCRIPTS "${REPO_LOC}/otherScripts")
+
 # ===== START: cppCheck =====
 
 # NOTE: This section should come before adding the subdirectories
-
-set(FILE_CPPCHECK_SOURCES "${CMAKE_BINARY_DIR}/cppCheck/configs/sources_for_cppCheck.txt")
-set(FILE_CPPCHECK_INCLUDES "${CMAKE_BINARY_DIR}/cppCheck/configs/includes_for_cppCheck.txt")
-set(FILE_CPPCHECK_EXCLUDES "${CMAKE_BINARY_DIR}/cppCheck/configs/excludes_for_cppCheck.txt")
-set(FILE_CPPCHECK_SUPPRESS "${CMAKE_BINARY_DIR}/cppCheck/configs/suppress_for_cppCheck.txt")
-set(CPP_CHECK_BUILD_DIR "${CMAKE_BINARY_DIR}/cppCheck/build")
-set(CPP_CHECK_REPORTS_DIR "${CMAKE_BINARY_DIR}/cppCheck/reports")
-set(CPP_CHECK_REPORTS_XML "${CPP_CHECK_REPORTS_DIR}/report.xml")
-
-file(WRITE ${FILE_CPPCHECK_SOURCES} "")
-file(WRITE ${FILE_CPPCHECK_INCLUDES} "")
-file(WRITE ${FILE_CPPCHECK_EXCLUDES} "")
-file(WRITE ${FILE_CPPCHECK_SUPPRESS} "")
+include(${REPO_LOC_CMAKE_SCRIPTS}/configureCppCheck.cmake)
 
 # ===== END: cppCheck =====
 
@@ -73,10 +65,6 @@ target_link_libraries(
     exercise
 )
 
-set(REPO_LOC "${CMAKE_SOURCE_DIR}/../../../")
-set(REPO_LOC_CMAKE_SCRIPTS "${REPO_LOC}/cmakeScripts")
-set(REPO_LOC_OTHER_SCRIPTS "${REPO_LOC}/otherScripts")
-
 include(${REPO_LOC_CMAKE_SCRIPTS}/startDoxyDocGen.cmake)
 
 # Call the function defined in DoxygenDoc.cmake to add our project's documentation target
@@ -94,3 +82,6 @@ add_my_doxygen_target(
 )
 
 include("${REPO_LOC_CMAKE_SCRIPTS}/addForTesting.cmake")
+
+file(APPEND ${FILE_CPPCHECK_EXCLUDES} "${CMAKE_BINARY_DIR}\n")
+file(APPEND ${FILE_CPPCHECK_EXCLUDES} "${CMAKE_SOURCE_DIR}/tests\n")
