@@ -8,6 +8,25 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_options(-Wall -Wextra -pedantic)
 set(COVERAGE_COMPILER_FLAGS "--coverage")
 
+# ===== START: cppCheck =====
+
+# NOTE: This section should come before adding the subdirectories
+
+set(FILE_CPPCHECK_SOURCES "${CMAKE_BINARY_DIR}/cppCheck/configs/sources_for_cppCheck.txt")
+set(FILE_CPPCHECK_INCLUDES "${CMAKE_BINARY_DIR}/cppCheck/configs/includes_for_cppCheck.txt")
+set(FILE_CPPCHECK_EXCLUDES "${CMAKE_BINARY_DIR}/cppCheck/configs/excludes_for_cppCheck.txt")
+set(FILE_CPPCHECK_SUPPRESS "${CMAKE_BINARY_DIR}/cppCheck/configs/suppress_for_cppCheck.txt")
+set(CPP_CHECK_BUILD_DIR "${CMAKE_BINARY_DIR}/cppCheck/build")
+set(CPP_CHECK_REPORTS_DIR "${CMAKE_BINARY_DIR}/cppCheck/reports")
+set(CPP_CHECK_REPORTS_XML "${CPP_CHECK_REPORTS_DIR}/report.xml")
+
+file(WRITE ${FILE_CPPCHECK_SOURCES} "")
+file(WRITE ${FILE_CPPCHECK_INCLUDES} "")
+file(WRITE ${FILE_CPPCHECK_EXCLUDES} "")
+file(WRITE ${FILE_CPPCHECK_SUPPRESS} "")
+
+# ===== END: cppCheck =====
+
 add_subdirectory(exercise)
 add_subdirectory(lib)
 
