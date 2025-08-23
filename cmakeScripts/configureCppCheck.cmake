@@ -60,3 +60,11 @@ file(APPEND ${FILE_CPPCHECK_SUPPRESS} "${CPPCHECK_CFG_SUPPRESSIONS}\n")
 file(COPY "${REPO_LOC_OTHER_SCRIPTS}/run_cppcheck.sh"
     DESTINATION "${CMAKE_BINARY_DIR}/cppCheck/"
 )
+
+add_custom_target(
+    cppcheck
+    COMMAND cd "${CMAKE_BINARY_DIR}/cppCheck" && ./run_cppcheck.sh
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMENT "Running Cppcheck static analysis"
+    VERBATIM
+)

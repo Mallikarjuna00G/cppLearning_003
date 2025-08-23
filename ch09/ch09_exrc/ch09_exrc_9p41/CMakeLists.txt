@@ -38,6 +38,7 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E echo "  -->  test     - Run the tests"
     COMMAND ${CMAKE_COMMAND} -E echo "  -->  coverage_report     - Unit test coverage reports (gcovr)"
     COMMAND ${CMAKE_COMMAND} -E echo "  -->  junit2html_reports     - Googletest xml reports in html format using junit2html"
+    COMMAND ${CMAKE_COMMAND} -E echo "  -->  cppcheck     - run cppcheck static analysis"
     COMMENT "Displays help information about custom targets."
     VERBATIM
 )
